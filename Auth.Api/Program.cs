@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Auth.Api.Services.JwtAuth;
 using Auth.Infra;
 using Auth.Infra.Entities;
 using Common.Api.Configure;
@@ -24,6 +25,7 @@ builder.Services.AddIdentity<AppUser, RoleEntity>()
     .AddRoleManager<RoleManager<RoleEntity>>();
 
 builder.Services.AddJwtBearerAuthentication(builder.Configuration);
+builder.Services.AddSingleton<IJwtGenerator, JwtGenerator>();
 
 builder.Services.AddAuthorization();
 
