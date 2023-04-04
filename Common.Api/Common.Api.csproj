@@ -13,10 +13,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Jwt\JwtValidator.cs">
-      <DependentUpon>IJwtValidator.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
 </Project>

@@ -1,10 +1,9 @@
-﻿using Auth.Api.Data;
-using Auth.Infra.Entities;
+﻿using Auth.Infra.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Auth.Infra;
+namespace Auth.Infra.Data;
 
 public class AppUserDbContext : IdentityDbContext<
     AppUser,
@@ -16,7 +15,7 @@ public class AppUserDbContext : IdentityDbContext<
     IdentityRoleClaim<Guid>,
     IdentityUserToken<Guid>>
 {
-    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Customer> Customers { get; set; } = default!;
 
     public AppUserDbContext(DbContextOptions options) : base(options)
     {

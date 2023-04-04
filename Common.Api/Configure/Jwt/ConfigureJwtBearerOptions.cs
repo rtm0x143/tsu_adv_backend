@@ -4,17 +4,17 @@ using Microsoft.Extensions.Options;
 
 namespace Common.Api.Configure.Jwt;
 
-public class ConfigureJwtBearerOptions : IConfigureOptions<JwtBearerOptions>
+internal class ConfigureJwtBearerOptions : IConfigureOptions<JwtBearerOptions>
 {
-    private readonly IJwtValidator _validator;
+    private readonly ITokenValidationParametersProvider _parametersProvider;
 
-    public ConfigureJwtBearerOptions(IJwtValidator validator)
+    public ConfigureJwtBearerOptions(ITokenValidationParametersProvider parametersProvider)
     {
-        _validator = validator;
+        _parametersProvider = parametersProvider;
     }
 
     public void Configure(JwtBearerOptions options)
     {
-        options.TokenValidationParameters = _validator.ValidationParameters;
+        options.TokenValidationParameters = _parametersProvider.ValidationParameters;
     }
 }

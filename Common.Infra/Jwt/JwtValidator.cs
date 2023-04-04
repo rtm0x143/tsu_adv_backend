@@ -1,14 +1,15 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Common.Api.jwt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Common.Api.jwt;
+namespace Common.Infra.Jwt;
 
-internal class JwtValidator : IJwtValidator
+internal class JwtValidator : IJwtValidator, ITokenValidationParametersProvider
 {
     /// <summary>
     /// Creates new <see cref="TokenValidationParameters"/> using data from <paramref name="props"/>

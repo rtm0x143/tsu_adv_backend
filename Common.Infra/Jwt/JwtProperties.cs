@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Common.Api.jwt;
+namespace Common.Infra.Jwt;
 
 public class JwtConfigurationProperties
 {

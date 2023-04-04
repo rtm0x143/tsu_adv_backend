@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Auth.Infra.Entities;
+namespace Auth.Infra.Data.Entities;
 
 public enum Gender
 {

@@ -1,11 +1,11 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Common.Api.jwt;
+using Common.Infra.Jwt;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Auth.Api.Services.JwtAuth;
+namespace Auth.Infra.Services;
 
 public class JwtGenerator : IJwtGenerator
 {

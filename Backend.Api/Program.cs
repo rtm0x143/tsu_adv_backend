@@ -12,7 +12,7 @@ builder.Services.AddCommonVersioning();
 
 builder.Services.AddCommonSwagger();
 
-builder.Services.AddJwtBearerAuthentication(builder.Configuration);
+builder.Services.AddCommonJwtBearerAuth();
 
 builder.Services.AddAuthorization();
 

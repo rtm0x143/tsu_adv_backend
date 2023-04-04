@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Auth.Api.Data;
 using Microsoft.AspNetCore.Identity;
 
-namespace Auth.Infra.Entities;
+namespace Auth.Infra.Data.Entities;
 
 public class RoleEntity : IdentityRole<Guid>
 {
@@ -25,7 +24,7 @@ public class RoleEntity : IdentityRole<Guid>
 public class AppUserRole : IdentityUserRole<Guid>
 {
     [ForeignKey(nameof(UserId))]
-    public AppUser User { get; set; }
+    public AppUser? User { get; set; }
     [ForeignKey(nameof(RoleId))]
-    public RoleEntity Role { get; set; }
+    public RoleEntity? Role { get; set; }
 }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using Auth.Api.Services.JwtAuth;
-using Auth.Infra;
-using Auth.Infra.Entities;
+using Auth.Infra.Data;
+using Auth.Infra.Data.Entities;
+using Auth.Infra.Services;
 using Common.Api.Configure;
 using Common.Api.Configure.Jwt;
 using Common.Api.Configure.Swagger;
@@ -13,19 +13,17 @@ builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddCommonVersioning();
-
 builder.Services.AddCommonSwagger();
 
 builder.Services.AddDbContext<AppUserDbContext>();
-
 builder.Services.AddIdentity<AppUser, RoleEntity>()
     .AddEntityFrameworkStores<AppUserDbContext>()
     .AddSignInManager<SignInManager<AppUser>>()
     .AddUserManager<UserManager<AppUser>>()
     .AddRoleManager<RoleManager<RoleEntity>>();
 
-builder.Services.AddJwtBearerAuthentication(builder.Configuration);
-builder.Services.AddSingleton<IJwtGenerator, JwtGenerator>();
+builder.Services.AddInfraServices(builder.Configuration);
+builder.Services.AddCommonJwtBearerAuth();
 
 builder.Services.AddAuthorization();
 

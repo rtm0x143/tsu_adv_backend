@@ -24,12 +24,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Auth.Infra\Auth.Infra.csproj" />
     <ProjectReference Include="..\Common.Api\Common.Api.csproj" />
+    <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers" />
+    <Folder Include="Domain" />
+    <Folder Include="Features" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Infra\Services\JwtGenerator.cs">
+      <DependentUpon>IJwtGenerator.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>
