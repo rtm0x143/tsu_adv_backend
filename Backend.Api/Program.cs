@@ -1,6 +1,6 @@
-using Common.Api.Configure;
-using Common.Api.Configure.Jwt;
-using Common.Api.Configure.Swagger;
+using Common.App.Configure;
+using Common.App.Configure.Jwt;
+using Common.App.Configure.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 

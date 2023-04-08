@@ -1,4 +1,4 @@
-﻿using Common.Infra.Jwt;
+﻿using Common.Infra.Services.Jwt;
 
 namespace Auth.Infra.Services;
 

@@ -12,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common.Api\Common.Api.csproj" />
+    <ProjectReference Include="..\Common.App\Common.App.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers"/>
+    <Folder Include="Controllers" />
   </ItemGroup>
 
 </Project>
