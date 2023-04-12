@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Runtime.InteropServices.JavaScript;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Common.Infra.Services.Jwt;
@@ -41,10 +42,10 @@ public class JwtConfigurationProperties
             ?? throw new ArgumentException("Configuration's prop 'Jwt:SigningKey' was Null");
         LifeTime = TimeSpan.TryParse(config["Jwt:LifeTime"], out var lifeTime)
             ? lifeTime
-            : throw new ArgumentException("Configuration's prop 'Jwt:LifeTime' was invalid or unspesified");
+            : throw new ArgumentException("Configuration's prop 'Jwt:LifeTime' was invalid or unspecified");
         SigningAlgorithm = config["Jwt:SigningAlgorithm"] ?? SecurityAlgorithms.HmacSha256Signature;
         Issuers = config["Jwt:Issuers"]?.Split(";") ?? Array.Empty<string>();
         Audiences = config["Jwt:Audiences"]?.Split(";") ?? Array.Empty<string>();
-        ValidAlgorithms = config["Jwt:ValidAlgorithms"]?.Split(";") ?? new[] { SigningAlgorithm };
+        ValidAlgorithms = config["Jwt:ValidAlgorithms"]?.Split(";") ?? Array.Empty<string>();
     }
 }

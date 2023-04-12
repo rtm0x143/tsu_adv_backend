@@ -16,17 +16,22 @@ internal class JwtValidatorService : IJwtValidator, ITokenValidationParametersPr
     /// </summary>
     /// <inheritdoc cref="JwtConfigurationProperties.ReadConfiguration(IConfiguration)"/>
     public static TokenValidationParameters CreateValidationParameters(JwtConfigurationProperties props)
-        => new()
+    {
+        var parameters = new TokenValidationParameters
         {
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(props.SigningKey)),
             ValidAlgorithms = props.ValidAlgorithms,
-            ValidateIssuer = true,
-            ValidIssuers = props.Issuers.Append(props.ApplicationId),
-            ValidateAudience = true,
-            ValidAudiences = props.Audiences.Append(props.ApplicationId),
+            ValidateIssuer = !props.Issuers.IsNullOrEmpty(),
+            ValidateAudience = !props.Audiences.IsNullOrEmpty()
         };
+
+        parameters.ValidIssuers = parameters.ValidateIssuer ? props.Issuers.Append(props.ApplicationId) : null;
+        parameters.ValidAudiences = parameters.ValidateAudience ? props.Audiences.Append(props.ApplicationId) : null;
+
+        return parameters;
+    }
 
     public TokenValidationParameters ValidationParameters { get; }
 
