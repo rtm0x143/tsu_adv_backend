@@ -1,14 +1,14 @@
 using System;
-using Auth.Features.RegisterUser;
+using Auth.Features.Customer.Commands;
 using Auth.Infra.Data.Entities;
 
 namespace Auth.Mappers.Generated
 {
-    public static partial class RegisterCustomerCommandMapper
+    public static partial class RegisterCustomerDtoMapper
     {
-        private static Action<RegisterCustomerCommand, CustomerData> Action1;
+        private static Action<RegisterCustomerDto, CustomerData> Action1;
         
-        public static CustomerData AdaptToCustomerData(this RegisterCustomerCommand p1)
+        public static CustomerData AdaptToCustomerData(this RegisterCustomerDto p1)
         {
             if (p1 == null)
             {
@@ -21,7 +21,7 @@ namespace Auth.Mappers.Generated
             return result;
             
         }
-        public static CustomerData AdaptTo(this RegisterCustomerCommand p2, CustomerData p3)
+        public static CustomerData AdaptTo(this RegisterCustomerDto p2, CustomerData p3)
         {
             if (p2 == null)
             {

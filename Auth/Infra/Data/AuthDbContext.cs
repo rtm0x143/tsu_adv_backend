@@ -21,6 +21,8 @@ public class AuthDbContext : IdentityDbContext<
     
     public DbSet<RestaurantAssociationUserClaim> RestaurantAssociationRoleClaims { get; set; } = default!;
     public DbSet<Restaurant> Restaurants { get; set; } = default!;
+    
+    public DbSet<UserRefreshToken> UserRefreshTokens { get; set; } = default!;
 
     public AuthDbContext(DbContextOptions options) : base(options)
     {

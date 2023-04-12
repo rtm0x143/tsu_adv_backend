@@ -1,11 +1,11 @@
-using Auth.Features.RegisterUser;
+using Auth.Features.User.Commands;
 using Auth.Infra.Data.Entities;
 
 namespace Auth.Mappers.Generated
 {
-    public static partial class RegisterUserCommandMapper
+    public static partial class RegisterUserDtoMapper
     {
-        public static AppUser AdaptToAppUser(this RegisterUserCommand p1)
+        public static AppUser AdaptToAppUser(this RegisterUserDto p1)
         {
             return p1 == null ? null : new AppUser()
             {
@@ -16,7 +16,7 @@ namespace Auth.Mappers.Generated
                 PhoneNumber = p1.PhoneNumber
             };
         }
-        public static AppUser AdaptTo(this RegisterUserCommand p2, AppUser p3)
+        public static AppUser AdaptTo(this RegisterUserDto p2, AppUser p3)
         {
             if (p2 == null)
             {

@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Auth.Features.RegisterUser;
+﻿using Auth.Features.User.Commands;
+using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
 using Auth.Mappers.Generated;
-using Common.App.Dtos.Results;
 using Common.App.Exceptions;
-using Mapster;
+using Common.App.Models.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
@@ -30,39 +29,23 @@ namespace Auth.ControllersOrigin
     }
 }
 
-namespace Auth.Features.RegisterUser
+namespace Auth.Features.User.Commands
 {
-    public record RegisterUserCommand
-    {
-        public required string Fullname { get; set; }
-        [EmailAddress] public required string Email { get; set; }
-        public DateOnly? BirthDate { get; set; }
-        public Gender Gender { get; set; }
-        [Phone] public required string PhoneNumber { get; set; }
-        public required string Password { get; set; }
-
-
-        internal class MapperRegister : IRegister
-        {
-            public virtual void Register(TypeAdapterConfig config)
-            {
-                config.NewConfig<RegisterUserCommand, AppUser>()
-                    .Map(d => d.UserName, s => s.Fullname)
-                    .GenerateMapper(MapType.Map | MapType.MapToTarget);
-            }
-        }
-    }
-
     public class RegisterUser : IRegisterUser
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly AuthDbContext _context;
 
-        public RegisterUser(UserManager<AppUser> userManager) => _userManager = userManager;
+        public RegisterUser(UserManager<AppUser> userManager, AuthDbContext context)
+        {
+            _userManager = userManager;
+            _context = context;
+        }
 
         public Task<OneOf<IdResult, UnsuitableDataException>> Execute(RegisterUserCommand command)
         {
-            var newUser = command.AdaptToAppUser();
-            return _userManager.CreateAsync(newUser, command.Password)
+            var newUser = command.UserDto.AdaptToAppUser();
+            return _userManager.CreateAsync(newUser, command.UserDto.Password)
                 .ContinueWith<OneOf<IdResult, UnsuitableDataException>>((t, user) =>
                 {
                     if (t.Result.Succeeded) return new IdResult(((AppUser)user!).Id);

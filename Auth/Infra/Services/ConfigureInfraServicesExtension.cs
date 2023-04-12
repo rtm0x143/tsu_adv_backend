@@ -1,4 +1,7 @@
-﻿using Common.Infra.Services.Jwt;
+﻿using Auth.Features.Auth.Common;
+using Auth.Features.Common;
+using Auth.Infra.Services.Refresh;
+using Common.Infra.Services.Jwt;
 
 namespace Auth.Infra.Services;
 
@@ -13,6 +16,10 @@ public static class ConfigureInfraServicesExtension
     {
         services.AddCommonJwtServices(configuration);
         services.AddSingleton<IJwtGenerator, JwtGenerator>();
-        return services;
+        
+        services.Configure<RefreshTokenConfigurationProperties>(
+            configuration.GetSection(RefreshTokenConfigurationProperties.ConfigurationSection));
+
+        return services.AddScoped<IRefreshTokenHandler, RefreshTokenHandler>();
     }
 }

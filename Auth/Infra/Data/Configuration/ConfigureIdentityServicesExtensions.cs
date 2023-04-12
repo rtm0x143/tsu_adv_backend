@@ -1,7 +1,5 @@
 ﻿using Auth.Infra.Data.Entities;
-using Auth.Infra.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Auth.Infra.Data.Configuration;
 
@@ -13,10 +11,13 @@ public static class ConfigureIdentityServicesExtensions
     /// <returns><see cref="IdentityBuilder"/> for chaining</returns>
     public static IdentityBuilder AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var builder = services.AddAppUserDbContext(configuration)
-            .AddIdentity<AppUser, RoleEntity>()
-            .AddEntityFrameworkStores<AuthDbContext>();
-        
-        return builder;
+        return services.AddAppUserDbContext(configuration)
+            .AddIdentityCore<AppUser>(setup =>
+            {
+                setup.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<AuthDbContext>()
+            .AddSignInManager()
+            .AddDefaultTokenProviders();
     }
 }

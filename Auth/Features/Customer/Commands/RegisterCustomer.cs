@@ -1,11 +1,11 @@
-﻿using Auth.Features.RegisterUser;
+﻿using Auth.Features.Customer.Commands;
+using Auth.Features.User.Commands;
 using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
-using Auth.Mappers.Generated;
-using Common.App.Dtos.Results;
 using Common.App.Exceptions;
+using Common.App.Models.Results;
 using Common.Infra.Auth;
-using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
@@ -15,10 +15,11 @@ namespace Auth.ControllersOrigin
     public partial class CustomerController
     {
         /// <summary>
-        /// Registers new customer user
+        /// Registers new user as a customer
         /// </summary>
         /// <responce code="400">When some data were unsuitable</responce>
         /// <returns>Customer's id</returns>
+        [Authorize]
         [HttpPost]
         public Task<ActionResult<IdResult>> Register(RegisterCustomerCommand registerCustomerCommand,
             [FromServices] RegisterCustomer useCase)
@@ -33,23 +34,8 @@ namespace Auth.ControllersOrigin
     }
 }
 
-namespace Auth.Features.RegisterUser
+namespace Auth.Features.Customer.Commands
 {
-    public record RegisterCustomerCommand : RegisterUserCommand
-    {
-        public required string Address { get; set; }
-
-        internal new class MapperRegister : IRegister
-        {
-            public void Register(TypeAdapterConfig config)
-            {
-                config.NewConfig<RegisterCustomerCommand, CustomerData>()
-                    .BeforeMapping((src, dest) => ((RegisterUserCommand)src).AdaptTo(dest.User))
-                    .GenerateMapper(MapType.Map | MapType.MapToTarget);
-            }
-        }
-    }
-
     public class RegisterCustomer : IRegisterCustomer
     {
         private readonly UserManager<AppUser> _userManager;
@@ -67,7 +53,7 @@ namespace Auth.Features.RegisterUser
         {
             await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            var result = await _registerUser.Execute(command);
+            var result = await _registerUser.Execute(new(command.CustomerDto));
             if (result.IsT1) return result.AsT1;
             var user = await _userManager.FindByIdAsync(result.AsT0.Id.ToString())
                        ?? throw new UnexpectedException($"Successfully created user({result.AsT0.Id} can't be found");
@@ -75,8 +61,8 @@ namespace Auth.Features.RegisterUser
             var identityResult = await _userManager.AddToRoleAsync(user, nameof(RoleNames.Customer));
             if (!identityResult.Succeeded) return UnsuitableDataException.FromIdentityResult(identityResult);
 
-            await _dbContext.CustomersData.AddAsync(new() { Address = command.Address, User = user });
-            
+            await _dbContext.CustomersData.AddAsync(new() { Address = command.CustomerDto.Address, User = user });
+
             await transaction.CommitAsync();
             return new IdResult(user.Id);
         }

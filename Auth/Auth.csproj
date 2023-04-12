@@ -7,6 +7,14 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <NoWarn>1701;1702;IL2121;1591;IL2121</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <NoWarn>1701;1702;IL2121;1591;IL2121</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
@@ -35,20 +43,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain" />
     <Folder Include="Mappers" />
     <Folder Include="Migrations" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Infra\Services\JwtGenerator.cs">
-      <DependentUpon>IJwtGenerator.cs</DependentUpon>
-    </Compile>
     <Compile Update="Features\RegisterUser\RegisterUser.cs">
       <DependentUpon>IRegisterUser.cs</DependentUpon>
     </Compile>
     <Compile Update="Features\RegisterUser\RegisterCustomer.cs">
       <DependentUpon>IRegisterCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Commands\RegisterUserDtoMapper.cs">
+      <DependentUpon>IRegisterUser.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Customer\Commands\RegisterCustomerDtoMapper.cs">
+      <DependentUpon>IRegisterCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Commands\RegisterUser.cs">
+      <DependentUpon>IRegisterUser.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\Refresh.cs">
+      <DependentUpon>LoginByPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\IRefresh.cs">
+      <DependentUpon>ILoginByPassword.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

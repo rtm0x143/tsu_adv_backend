@@ -1,5 +1,4 @@
 using System.Reflection;
-using Auth.Features.RegisterUser;
 using Auth.Infra.Data.Configuration;
 using Auth.Infra.Services;
 using Common.App.Configure;
@@ -14,6 +13,7 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddCommonVersioning();
 builder.Services.AddCommonSwagger();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddInfraServices(builder.Configuration);
@@ -25,8 +25,6 @@ builder.Services.AddUseCasesFrom(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 
-app.UseRouting();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseCommonSwagger();
@@ -34,6 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

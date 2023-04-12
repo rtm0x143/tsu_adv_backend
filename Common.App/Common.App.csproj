@@ -13,9 +13,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\Commands" />
-    <Folder Include="Dtos\Queries" />
-  </ItemGroup>
-
 </Project>
