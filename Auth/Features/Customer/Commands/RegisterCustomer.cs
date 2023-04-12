@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
 
-namespace Auth.ControllersOrigin
+namespace Auth.Controllers
 {
     public partial class CustomerController
     {
@@ -19,7 +19,6 @@ namespace Auth.ControllersOrigin
         /// </summary>
         /// <responce code="400">When some data were unsuitable</responce>
         /// <returns>Customer's id</returns>
-        [Authorize]
         [HttpPost]
         public Task<ActionResult<IdResult>> Register(RegisterCustomerCommand registerCustomerCommand,
             [FromServices] RegisterCustomer useCase)

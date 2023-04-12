@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
 
-namespace Auth.ControllersOrigin
+namespace Auth.Controllers
 {
     public partial class AuthController
     {

@@ -4,7 +4,6 @@ using Common.App.Attributes;
 using Common.App.Exceptions;
 using Common.App.Models.Results;
 using Common.App.UseCases;
-using Mapster;
 using OneOf;
 
 namespace Auth.Features.User.Commands;

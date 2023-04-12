@@ -1,11 +1,14 @@
 ﻿using Common.App.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Auth.ControllersOrigin;
+namespace Auth.Controllers;
 
 [ApiController]
 [VersioningApiRoute]
 [ApiExplorerSettings(GroupName = "Auth")]
-public partial class AuthController : ControllerBase
-{   
+public partial class CustomerController : ControllerBase
+{
+    public CustomerController()
+    {
+    }
 }
