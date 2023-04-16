@@ -1,7 +1,7 @@
 ﻿namespace Common.Infra.Auth;
 
 /// <summary> Preset widely used role names </summary>
-public enum RoleNames
+public enum CommonRoles
 {
     Customer,
     Courier,
