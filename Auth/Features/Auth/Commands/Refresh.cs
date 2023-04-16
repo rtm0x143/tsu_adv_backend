@@ -20,7 +20,7 @@ namespace Auth.Controllers
                 argument => BadRequest(argument.Message),
                 notFound => NotFound(notFound.Message)));
         }
-    } 
+    }
 }
 
 namespace Auth.Features.Auth.Commands
@@ -46,15 +46,16 @@ namespace Auth.Features.Auth.Commands
             var result = await _refreshTokenHandler.Read(request.RefreshToken);
             if (!result.TryPickT0(out var tokenModel, out var rem)) return rem.IsT1 ? rem.AsT1 : rem.AsT0;
 
-            var refreshResult = await tokenModel.ExecuteRefresh();
+            var refreshResult = await tokenModel.ExecuteRefresh(_refreshTokenHandler);
             if (!refreshResult.TryPickT0(out var newRefreshToken, out var refreshException)) return refreshException;
 
             var user = await _signInManager.UserManager.FindByIdAsync(newRefreshToken.UserId.ToString());
             if (user == null) return new KeyNotFoundException("UserId");
 
-            return new TokensResult(
-                _jwtGenerator.IssueToken((await _signInManager.CreateUserPrincipalAsync(user)).Claims),
-                newRefreshToken.Evaluate());
+            var principal = await _signInManager.CreateUserPrincipalAsync(user);
+
+            return new TokensResult(_jwtGenerator.IssueToken(principal.Claims),
+                _refreshTokenHandler.Write(newRefreshToken));
         }
     }
 }

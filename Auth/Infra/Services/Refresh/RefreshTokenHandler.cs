@@ -1,6 +1,7 @@
 ﻿using Auth.Features.Auth.Common;
 using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
+using Auth.Mappers.Generated;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -22,15 +23,14 @@ public class RefreshTokenHandler : IRefreshTokenHandler
 
     private async Task<OneOf<RefreshToken, ArgumentException>> IssuerFor(Guid userId)
     {
-        var createResult = RefreshToken.CreateNew(this, userId, _tokenProperties.LifeTime);
+        var createResult = RefreshToken.CreateNew(userId, _tokenProperties.LifeTime);
         if (createResult.IsT1) return createResult.AsT1;
 
-        // var tokenEntity = createResult.AsT0.AdaptTo();
-
-        var entry = await _dbContext.UserRefreshTokens.AddAsync(null!);
+        var tokenEntity = createResult.AsT0.AdaptToUser();
+        var entry = await _dbContext.UserRefreshTokens.AddAsync(tokenEntity);
         await _dbContext.SaveChangesAsync();
 
-        return entry.Entity.ToRefreshTokenModel(this);
+        return entry.Entity.ToRefreshTokenModel();
     }
 
     public Task<OneOf<RefreshToken, ArgumentException>> IssuerFor(AppUser user) => IssuerFor(user.Id);
@@ -48,10 +48,13 @@ public class RefreshTokenHandler : IRefreshTokenHandler
         if (entity != null) entity.IsUsed = true;
     }
 
-    public Task DropFamily(RefreshToken token)
+    public Task DropFamily(RefreshToken token) => _dropFamily(token.UserId);
+    public Task DropFamily(AppUser user) => _dropFamily(user.Id);
+
+    private Task _dropFamily(Guid userId)
     {
         return _dbContext.UserRefreshTokens
-            .Where(t => t.UserId == token.UserId)
+            .Where(t => t.UserId == userId)
             .ExecuteDeleteAsync();
     }
 
@@ -72,7 +75,7 @@ public class RefreshTokenHandler : IRefreshTokenHandler
         var token = await _dbContext.UserRefreshTokens.FindAsync(tokenId);
         if (token == null) return new KeyNotFoundException("TokenId");
 
-        return token.ToRefreshTokenModel(this)
+        return token.ToRefreshTokenModel()
             .Match<OneOf<RefreshToken, ArgumentException, KeyNotFoundException>>(
                 tokenModel => tokenModel,
                 ex => ex);

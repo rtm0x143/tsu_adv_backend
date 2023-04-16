@@ -1,5 +1,7 @@
 ﻿using Auth.Infra.Data.Entities;
+using Auth.Infra.Data.IdentityServices;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Auth.Infra.Data.Configuration;
 
@@ -16,8 +18,10 @@ public static class ConfigureIdentityServicesExtensions
             {
                 setup.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<AuthDbContext>()
+            .AddUserManager<AuthUserManager>()
+            .AddRoles<RoleEntity>()
             .AddSignInManager()
+            .AddEntityFrameworkStores<AuthDbContext>()
             .AddDefaultTokenProviders();
     }
 }

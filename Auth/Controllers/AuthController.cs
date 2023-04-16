@@ -1,11 +1,5 @@
-﻿using Common.App.Attributes;
-using Microsoft.AspNetCore.Mvc;
+﻿namespace Auth.Controllers;
 
-namespace Auth.Controllers;
-
-[ApiController]
-[VersioningApiRoute]
-[ApiExplorerSettings(GroupName = "Auth")]
-public partial class AuthController : ControllerBase
-{   
+public partial class AuthController : AuthControllerBase<AuthController>
+{
 }

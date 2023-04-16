@@ -2,13 +2,13 @@
 using Common.App.Attributes;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Common.App.UseCases;
+namespace Common.App.RequestHandlers;
 
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds all <see cref="IUseCase{TRequest,TResult}"/>, <see cref="IAsyncUseCase{TRequest,TResult}"/>
-    /// and any interface annotated with <see cref="UseCaseInterfaceAttribute"/>
+    /// Adds all <see cref="IRequestHandler{TRequest,TResult}"/>
+    /// and any interface annotated with <see cref="RequestHandlerInterfaceAttribute"/>
     /// implementations and that services itself to <see cref="IServiceCollection"/>
     /// </summary>
     /// <param name="services">Target <see cref="IServiceCollection"/></param>
@@ -19,10 +19,9 @@ public static class ServiceCollectionExtensions
         foreach (var type in assembly.GetTypes().Where(t => !t.IsAbstract))
         {
             var useCaseInterfaces = type.GetInterfaces()
-                .Where(i => i.Name == typeof(IUseCase<,>).Name
-                            || i.Name == typeof(IAsyncUseCase<,>).Name
+                .Where(i => i.Name == typeof(IRequestHandler<,>).Name
                             || i.CustomAttributes.FirstOrDefault(a =>
-                                a.AttributeType == typeof(UseCaseInterfaceAttribute)) != null)
+                                a.AttributeType == typeof(RequestHandlerInterfaceAttribute)) != null)
                 .ToArray();
             if (useCaseInterfaces.Length == 0) continue;
 

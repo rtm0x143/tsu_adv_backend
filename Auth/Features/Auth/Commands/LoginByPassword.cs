@@ -15,11 +15,9 @@ namespace Auth.Controllers
         public Task<ActionResult<TokensResult>> Login(LoginByPasswordCommand command,
             [FromServices] ILoginByPassword login)
         {
-            return login.Execute(command).ContinueWith<ActionResult<TokensResult>>(t =>
-            {
-                if (!t.Result.IsT0) return Unauthorized();
-                return t.Result.AsT0;
-            });
+            return login.Execute(command).ContinueWith<ActionResult<TokensResult>>(t => t.Result.IsT0
+                ? t.Result.AsT0
+                : Unauthorized());
         }
     }
 }
@@ -57,7 +55,7 @@ namespace Auth.Features.Auth.Commands
 
             var refreshTokenResult = await _refreshTokenHandler.IssuerFor(user);
             if (refreshTokenResult.IsT1) return new ActionFailedException(refreshTokenResult.AsT1.Message);
-            var refresh = refreshTokenResult.AsT0.Evaluate();
+            var refresh = _refreshTokenHandler.Write(refreshTokenResult.AsT0);
 
             return new TokensResult(access, refresh);
         }

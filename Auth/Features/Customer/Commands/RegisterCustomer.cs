@@ -1,12 +1,10 @@
 ﻿using Auth.Features.Customer.Commands;
-using Auth.Features.User.Commands;
-using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
+using Auth.Infra.Data.IdentityServices;
+using Auth.Mappers.Generated;
 using Common.App.Exceptions;
 using Common.App.Models.Results;
 using Common.Infra.Auth;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
 
@@ -20,15 +18,13 @@ namespace Auth.Controllers
         /// <responce code="400">When some data were unsuitable</responce>
         /// <returns>Customer's id</returns>
         [HttpPost]
-        public Task<ActionResult<IdResult>> Register(RegisterCustomerCommand registerCustomerCommand,
-            [FromServices] RegisterCustomer useCase)
+        public Task<ActionResult<IdResult>> Register(CustomerRegistrationDto dto,
+            [FromServices] IRegisterCustomer useCase)
         {
-            return useCase.Execute(registerCustomerCommand)
-                .ContinueWith<ActionResult<IdResult>>(task =>
-                {
-                    if (task.Result.IsT1) return BadRequest(task.Result.AsT1.ToProblemDetails());
-                    return Ok(task.Result.Value);
-                });
+            return useCase.Execute(new(dto))
+                .ContinueWith<ActionResult<IdResult>>(task => task.Result.IsT0
+                    ? Ok(task.Result.AsT0)
+                    : BadRequest(task.Result.AsT1.ToProblemDetails()));
         }
     }
 }
@@ -37,33 +33,20 @@ namespace Auth.Features.Customer.Commands
 {
     public class RegisterCustomer : IRegisterCustomer
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IRegisterUser _registerUser;
-        private readonly AuthDbContext _dbContext;
+        private readonly AuthUserManager _userManager;
 
-        public RegisterCustomer(UserManager<AppUser> userManager, IRegisterUser registerUser, AuthDbContext dbContext)
+        public RegisterCustomer(AuthUserManager userManager) => _userManager = userManager;
+
+        public Task<OneOf<IdResult, UnsuitableDataException>> Execute(RegisterCustomerCommand command)
         {
-            _userManager = userManager;
-            _registerUser = registerUser;
-            _dbContext = dbContext;
-        }
-
-        public async Task<OneOf<IdResult, UnsuitableDataException>> Execute(RegisterCustomerCommand command)
-        {
-            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-            var result = await _registerUser.Execute(new(command.CustomerDto));
-            if (result.IsT1) return result.AsT1;
-            var user = await _userManager.FindByIdAsync(result.AsT0.Id.ToString())
-                       ?? throw new UnexpectedException($"Successfully created user({result.AsT0.Id} can't be found");
-
-            var identityResult = await _userManager.AddToRoleAsync(user, nameof(RoleNames.Customer));
-            if (!identityResult.Succeeded) return UnsuitableDataException.FromIdentityResult(identityResult);
-
-            await _dbContext.CustomersData.AddAsync(new() { Address = command.CustomerDto.Address, User = user });
-
-            await transaction.CommitAsync();
-            return new IdResult(user.Id);
+            var newUser = command.CustomerRegistrationDto.AdaptToCustomer();
+            return _userManager
+                .CreateWithRolesAsync(newUser, command.CustomerRegistrationDto.Password, CommonRoles.Customer)
+                .ContinueWith<OneOf<IdResult, UnsuitableDataException>>((t, user) =>
+                {
+                    if (t.Result.Succeeded) return new IdResult(((AppUser)user!).Id);
+                    return UnsuitableDataException.FromIdentityResult(t.Result);
+                }, newUser);
         }
     }
 }

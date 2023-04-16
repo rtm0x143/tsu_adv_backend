@@ -38,6 +38,10 @@ namespace Auth.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -91,6 +95,10 @@ namespace Auth.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AppUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Auth.Infra.Data.Entities.AppUserRole", b =>
@@ -106,19 +114,6 @@ namespace Auth.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Auth.Infra.Data.Entities.CustomerData", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("CustomersData");
                 });
 
             modelBuilder.Entity("Auth.Infra.Data.Entities.Restaurant", b =>
@@ -265,13 +260,6 @@ namespace Auth.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            ClaimType = "Grant",
-                            ClaimValue = "Courier",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
                             Id = 4,
                             ClaimType = "Grant",
                             ClaimValue = "RestaurantAdmin",
@@ -293,10 +281,52 @@ namespace Auth.Migrations
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 8,
+                            ClaimType = "Grant",
+                            ClaimValue = "RestaurantAdmin",
+                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ClaimType = "Grant",
+                            ClaimValue = "Cook",
+                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ClaimType = "Grant",
+                            ClaimValue = "Manager",
+                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
+                        },
+                        new
+                        {
+                            Id = 11,
                             ClaimType = "Grant",
                             ClaimValue = "Courier",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
+                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ClaimType = "Grant",
+                            ClaimValue = "RestaurantOwner",
+                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ClaimType = "PersonalData",
+                            ClaimValue = "Read",
+                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ClaimType = "PersonalData",
+                            ClaimValue = "Change",
+                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
                         });
                 });
 
@@ -372,6 +402,59 @@ namespace Auth.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Auth.Infra.Data.Entities.Admin", b =>
+                {
+                    b.HasBaseType("Auth.Infra.Data.Entities.AppUser");
+
+                    b.HasDiscriminator().HasValue("Admin");
+                });
+
+            modelBuilder.Entity("Auth.Infra.Data.Entities.Cook", b =>
+                {
+                    b.HasBaseType("Auth.Infra.Data.Entities.AppUser");
+
+                    b.HasDiscriminator().HasValue("Cook");
+                });
+
+            modelBuilder.Entity("Auth.Infra.Data.Entities.Courier", b =>
+                {
+                    b.HasBaseType("Auth.Infra.Data.Entities.AppUser");
+
+                    b.HasDiscriminator().HasValue("Courier");
+                });
+
+            modelBuilder.Entity("Auth.Infra.Data.Entities.Customer", b =>
+                {
+                    b.HasBaseType("Auth.Infra.Data.Entities.AppUser");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("Customer");
+                });
+
+            modelBuilder.Entity("Auth.Infra.Data.Entities.Manager", b =>
+                {
+                    b.HasBaseType("Auth.Infra.Data.Entities.AppUser");
+
+                    b.HasDiscriminator().HasValue("Manager");
+                });
+
+            modelBuilder.Entity("Auth.Infra.Data.Entities.RestaurantAdmin", b =>
+                {
+                    b.HasBaseType("Auth.Infra.Data.Entities.AppUser");
+
+                    b.HasDiscriminator().HasValue("RestaurantAdmin");
+                });
+
+            modelBuilder.Entity("Auth.Infra.Data.Entities.RestaurantOwner", b =>
+                {
+                    b.HasBaseType("Auth.Infra.Data.Entities.AppUser");
+
+                    b.HasDiscriminator().HasValue("RestaurantOwner");
+                });
+
             modelBuilder.Entity("Auth.Infra.Data.Entities.RestaurantAssociationUserClaim", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>");
@@ -399,17 +482,6 @@ namespace Auth.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Auth.Infra.Data.Entities.CustomerData", b =>
-                {
-                    b.HasOne("Auth.Infra.Data.Entities.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });

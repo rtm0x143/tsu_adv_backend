@@ -1,16 +1,16 @@
 ﻿using Auth.Features.Auth.Common;
 using Common.App.Attributes;
 using Common.App.Exceptions;
-using Common.App.UseCases;
+using Common.App.RequestHandlers;
 using OneOf;
 
 namespace Auth.Features.Auth.Commands;
 
 public record RefreshCommand(string RefreshToken) : 
-    IAsyncRequest<OneOf<TokensResult, ActionFailedException, ArgumentException, KeyNotFoundException>>;
+    IRequest<OneOf<TokensResult, ActionFailedException, ArgumentException, KeyNotFoundException>>;
 
-[UseCaseInterface]
-public interface IRefresh : IAsyncUseCase<
+[RequestHandlerInterface]
+public interface IRefresh : IRequestHandler<
     RefreshCommand,
     OneOf<TokensResult, ActionFailedException, ArgumentException, KeyNotFoundException>>
 {

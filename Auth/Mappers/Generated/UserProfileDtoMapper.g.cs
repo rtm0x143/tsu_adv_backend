@@ -1,11 +1,13 @@
-using Auth.Features.User.Commands;
+using System;
+using System.Linq.Expressions;
+using Auth.Features.Common;
 using Auth.Infra.Data.Entities;
 
 namespace Auth.Mappers.Generated
 {
-    public static partial class RegisterUserDtoMapper
+    public static partial class UserProfileDtoMapper
     {
-        public static AppUser AdaptToAppUser(this RegisterUserDto p1)
+        public static AppUser AdaptToAppUser(this UserProfileDto p1)
         {
             return p1 == null ? null : new AppUser()
             {
@@ -16,7 +18,7 @@ namespace Auth.Mappers.Generated
                 PhoneNumber = p1.PhoneNumber
             };
         }
-        public static AppUser AdaptTo(this RegisterUserDto p2, AppUser p3)
+        public static AppUser AdaptTo(this UserProfileDto p2, AppUser p3)
         {
             if (p2 == null)
             {
@@ -32,5 +34,13 @@ namespace Auth.Mappers.Generated
             return result;
             
         }
+        public static Expression<Func<UserProfileDto, AppUser>> ProjectToAppUser => p4 => new AppUser()
+        {
+            Gender = p4.Gender,
+            BirthDate = p4.BirthDate,
+            UserName = p4.Fullname,
+            Email = p4.Email,
+            PhoneNumber = p4.PhoneNumber
+        };
     }
 }

@@ -8,7 +8,7 @@ public class RoleEntity : IdentityRole<Guid>
     public ICollection<AppUserRole>? AssociatedUsers { get; set; }
 
     public RoleEntity() { }
-    public RoleEntity(RoleNames role) : base(Enum.GetName(role)!) { }
+    public RoleEntity(CommonRoles role) : base(Enum.GetName(role)!) { }
 }
 
 public class AppUserRole : IdentityUserRole<Guid>

@@ -12,12 +12,6 @@
     "ClaimValue": "Manager"
   },
   {
-    "Id": 3,
-    "RoleId": "761a9b67-f1e1-49b0-9a84-38e40be52d19",
-    "ClaimType": "Grant",
-    "ClaimValue": "Courier"
-  },
-  {
     "Id": 4,
     "RoleId": "761a9b67-f1e1-49b0-9a84-38e40be52d19",
     "ClaimType": "Grant",
@@ -36,9 +30,45 @@
     "ClaimValue": "Manager"
   },
   {
-    "Id": 7,
-    "RoleId": "33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82",
+    "Id": 8,
+    "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
+    "ClaimType": "Grant",
+    "ClaimValue": "RestaurantAdmin"
+  },
+  {
+    "Id": 9,
+    "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
+    "ClaimType": "Grant",
+    "ClaimValue": "Cook"
+  },
+  {
+    "Id": 10,
+    "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
+    "ClaimType": "Grant",
+    "ClaimValue": "Manager"
+  },
+  {
+    "Id": 11,
+    "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
     "ClaimType": "Grant",
     "ClaimValue": "Courier"
+  },
+  {
+    "Id": 12,
+    "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
+    "ClaimType": "Grant",
+    "ClaimValue": "RestaurantOwner"
+  },
+  {
+    "Id": 13,
+    "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
+    "ClaimType": "PersonalData",
+    "ClaimValue": "Read"
+  },
+  {
+    "Id": 14,
+    "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
+    "ClaimType": "PersonalData",
+    "ClaimValue": "Change"
   }
 ]

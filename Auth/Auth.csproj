@@ -54,20 +54,71 @@
     <Compile Update="Features\RegisterUser\RegisterCustomer.cs">
       <DependentUpon>IRegisterCustomer.cs</DependentUpon>
     </Compile>
-    <Compile Update="Features\User\Commands\RegisterUserDtoMapper.cs">
-      <DependentUpon>IRegisterUser.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Customer\Commands\RegisterCustomerDtoMapper.cs">
+    <Compile Update="Features\Customer\Commands\RegisterCustomer.Mapping.cs">
       <DependentUpon>IRegisterCustomer.cs</DependentUpon>
     </Compile>
-    <Compile Update="Features\User\Commands\RegisterUser.cs">
-      <DependentUpon>IRegisterUser.cs</DependentUpon>
-    </Compile>
     <Compile Update="Features\Auth\Commands\Refresh.cs">
-      <DependentUpon>LoginByPassword.cs</DependentUpon>
+      <DependentUpon>IRefresh.cs</DependentUpon>
     </Compile>
-    <Compile Update="Features\Auth\Commands\IRefresh.cs">
+    <Compile Update="Features\Customer\Commands\RegisterCustomer.cs">
+      <DependentUpon>IRegisterCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Manager\Commands\RegisterManager.cs">
+      <DependentUpon>IRegisterManager.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Common\UserRegistrationDto.Mapper.cs">
+      <DependentUpon>UserRegistrationDto..cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\RestaurantAdmin\Commands\RegisterRestaurantAdmin.cs">
+      <DependentUpon>IRegisterRestaurantAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\LoginByPassword.cs">
       <DependentUpon>ILoginByPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Commands\RegisterRestaurantRelatedUser.cs">
+      <DependentUpon>IRegisterRestaurantRelatedUser.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Cook\Commands\RegisterCook.cs">
+      <DependentUpon>IRegisterCook.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Courier\Commands\RegisterCourier.cs">
+      <DependentUpon>IRegisterCourier.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\RestaurantOwner\Commands\RegisterOwner.cs">
+      <DependentUpon>IRegisterOwner.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Commands\SetPassword.cs">
+      <DependentUpon>ISetPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\Logout.cs">
+      <DependentUpon>ILogout.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\RecoverPassword.cs">
+      <DependentUpon>IRecoverPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\RequestPasswordRecover.cs">
+      <DependentUpon>IRequestPasswordRecover.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\PasswordRecoveryMailSender.cs">
+      <DependentUpon>IRequestPasswordRecover.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Common\UserProfileDto.Mapper.cs">
+      <DependentUpon>UserProfileDto.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Customer\Queries\GetProfile.Mapping.cs">
+      <DependentUpon>IGetProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Customer\Queries\GetProfile.cs">
+      <DependentUpon>IGetProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Customer\Queries\GetProfile.Presentation.cs">
+      <DependentUpon>IGetProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Queries\GetProfile.cs">
+      <DependentUpon>IGetProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Queries\GetProfile.Presentation.cs">
+      <DependentUpon>IGetProfile.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

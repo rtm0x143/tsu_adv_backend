@@ -11,15 +11,11 @@ public class RefreshToken
     public bool IsUsed { get; private set; }
     public bool IsDropped { get; private set; }
 
-    protected IRefreshTokenHandler Handler { get; init; } = default!;
+    public static OneOf<RefreshToken, ArgumentException> CreateNew(Guid associatedUserId, TimeSpan lifeTime) =>
+        Construct(Guid.NewGuid(), associatedUserId, DateTime.UtcNow.Add(lifeTime), false);
 
-
-    public static OneOf<RefreshToken, ArgumentException> CreateNew(IRefreshTokenHandler handler,
-        Guid associatedUserId, TimeSpan lifeTime) =>
-        Construct(handler, Guid.NewGuid(), associatedUserId, DateTime.UtcNow.Add(lifeTime), false);
-
-    public static OneOf<RefreshToken, ArgumentException> Construct(IRefreshTokenHandler handler, Guid id,
-        Guid associatedUserId, DateTime expiration, bool isUsed)
+    public static OneOf<RefreshToken, ArgumentException> Construct(Guid id, Guid associatedUserId, DateTime expiration,
+        bool isUsed)
     {
         if (id == default) return new ArgumentException(nameof(id));
         if (associatedUserId == default) return new ArgumentException(nameof(associatedUserId));
@@ -30,26 +26,23 @@ public class RefreshToken
             Id = id,
             UserId = associatedUserId,
             IsUsed = isUsed,
-            ExpiresAt = expiration,
-            Handler = handler
+            ExpiresAt = expiration
         };
     }
 
-    public async Task<OneOf<RefreshToken, ActionFailedException>> ExecuteRefresh()
+    public async Task<OneOf<RefreshToken, ActionFailedException>> ExecuteRefresh(IRefreshTokenHandler handler)
     {
         if (IsUsed)
         {
-            await Handler.DropFamily(this);
+            await handler.DropFamily(this);
             IsDropped = true;
             return new ActionFailedException("Reuse of refresh token");
         }
 
         if (ExpiresAt <= DateTime.UtcNow) return new ActionFailedException("Refresh token already expired");
         IsUsed = true;
-        return (await Handler.ReIssue(this)).Match<OneOf<RefreshToken, ActionFailedException>>(
+        return (await handler.ReIssue(this)).Match<OneOf<RefreshToken, ActionFailedException>>(
             token => token,
             ex => new ActionFailedException("While reissuing token", ex));
     }
-
-    public string Evaluate() => Handler.Write(this);
 }

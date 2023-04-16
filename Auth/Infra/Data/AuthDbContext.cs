@@ -17,7 +17,13 @@ public class AuthDbContext : IdentityDbContext<
     IdentityRoleClaim<Guid>,
     IdentityUserToken<Guid>>
 {
-    public DbSet<CustomerData> CustomersData { get; set; } = default!;
+    public DbSet<Customer> Customers { get; set; } = default!;
+    public DbSet<Courier> Couriers { get; set; } = default!;
+    public DbSet<Admin> Admins { get; set; } = default!;
+    public DbSet<RestaurantOwner> RestaurantOwners { get; set; } = default!;
+    public DbSet<RestaurantAdmin> RestaurantAdmins { get; set; } = default!;
+    public DbSet<Manager> Managers { get; set; } = default!;
+    public DbSet<Cook> Cooks { get; set; } = default!;
     
     public DbSet<RestaurantAssociationUserClaim> RestaurantAssociationRoleClaims { get; set; } = default!;
     public DbSet<Restaurant> Restaurants { get; set; } = default!;
@@ -32,6 +38,8 @@ public class AuthDbContext : IdentityDbContext<
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<AppUser>().UseTphMappingStrategy();
+        
         builder.Entity<AppUserRole>()
             .HasOne<RoleEntity>(e => e.Role)
             .WithMany(e => e.AssociatedUsers)

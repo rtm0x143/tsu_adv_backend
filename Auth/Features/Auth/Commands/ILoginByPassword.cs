@@ -2,20 +2,20 @@
 using Auth.Features.Auth.Common;
 using Common.App.Attributes;
 using Common.App.Exceptions;
-using Common.App.UseCases;
+using Common.App.RequestHandlers;
 using OneOf;
 
 namespace Auth.Features.Auth.Commands;
 
 public record LoginByPasswordCommand : 
-    IAsyncRequest<OneOf<TokensResult, KeyNotFoundException, ActionFailedException>>
+    IRequest<OneOf<TokensResult, KeyNotFoundException, ActionFailedException>>
 {
     [EmailAddress] public required string Email { get; set; }
     public required string Password { get; set; }
 }
 
-[UseCaseInterface]
-public interface ILoginByPassword : IAsyncUseCase<LoginByPasswordCommand,
+[RequestHandlerInterface]
+public interface ILoginByPassword : IRequestHandler<LoginByPasswordCommand,
     OneOf<TokensResult, KeyNotFoundException, ActionFailedException>>
 {
 }

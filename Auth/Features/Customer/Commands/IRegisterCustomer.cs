@@ -1,21 +1,21 @@
-﻿using Auth.Features.User.Commands;
+﻿using Auth.Features.Common;
 using Common.App.Attributes;
 using Common.App.Exceptions;
 using Common.App.Models.Results;
-using Common.App.UseCases;
+using Common.App.RequestHandlers;
 using OneOf;
 
 namespace Auth.Features.Customer.Commands;
 
-public record RegisterCustomerDto : RegisterUserDto
+public record CustomerRegistrationDto : RestaurantUserRegistrationDto
 {
     public required string Address { get; set; }
 }
 
-public sealed record RegisterCustomerCommand(RegisterCustomerDto CustomerDto) :
-    IAsyncRequest<OneOf<IdResult, UnsuitableDataException>>;
+public sealed record RegisterCustomerCommand(CustomerRegistrationDto CustomerRegistrationDto) :
+    IRequestWithException<IdResult, UnsuitableDataException>;
 
-[UseCaseInterface]
-public interface IRegisterCustomer : IAsyncUseCase<RegisterCustomerCommand, OneOf<IdResult, UnsuitableDataException>>
+[RequestHandlerInterface]
+public interface IRegisterCustomer : IRequestHandlerWithException<RegisterCustomerCommand,  IdResult, UnsuitableDataException>
 {
 }

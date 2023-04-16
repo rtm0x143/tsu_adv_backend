@@ -9,8 +9,15 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
+    <PackageReference Include="OneOf" Version="3.0.243" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Exceptions\CommonExceptionsDescriber.cs">
+      <DependentUpon>IExceptionsDescriber.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>
