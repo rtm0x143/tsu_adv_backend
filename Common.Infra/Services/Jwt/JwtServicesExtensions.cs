@@ -14,8 +14,8 @@ public static class JwtServicesExtensions
     /// <returns>given <paramref name="services"/> parameter</returns>
     public static IServiceCollection AddCommonJwtServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<JwtConfigurationProperties>(
-            options => options.ReadConfiguration(configuration));
+        services.AddSingleton<IConfigureOptions<JwtValidationOptions>, ConfigureJwtValidationOptions>();
+        services.AddSingleton<IValidateOptions<JwtValidationOptions>, ValidateJwtValidationOptions>();
         
         services.AddSingleton<ITokenValidationParametersProvider, JwtValidatorService>();
         services.AddSingleton<IJwtValidator, JwtValidatorService>();

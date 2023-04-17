@@ -8,12 +8,12 @@ namespace Auth.Infra.Data.Configuration;
 public static class ConfigureIdentityServicesExtensions
 {
     /// <summary>
-    /// Configures <see cref="Microsoft.AspNetCore.Identity"/>, also applies <see cref="ConfigureDbContextExtensions.AddAppUserDbContext"/>
+    /// Configures <see cref="Microsoft.AspNetCore.Identity"/>, also applies <see cref="ConfigureDbContextExtensions.AddAuthDbContext"/>
     /// </summary>
     /// <returns><see cref="IdentityBuilder"/> for chaining</returns>
     public static IdentityBuilder AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
     {
-        return services.AddAppUserDbContext(configuration)
+        return services.AddAuthDbContext(configuration)
             .AddIdentityCore<AppUser>(setup =>
             {
                 setup.User.RequireUniqueEmail = true;

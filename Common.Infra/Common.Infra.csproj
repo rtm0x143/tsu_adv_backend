@@ -29,6 +29,12 @@
       <Compile Update="Auth\Policies\AuthorizeGrantRoleAttribute.cs">
         <DependentUpon>GrantRolePolicy.cs</DependentUpon>
       </Compile>
+      <Compile Update="Services\Jwt\ConfigureJwtValidationOptions.cs">
+        <DependentUpon>JwtValidationOptions.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Services\Jwt\ValidateJwtValidationOptions.cs">
+        <DependentUpon>JwtValidationOptions.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

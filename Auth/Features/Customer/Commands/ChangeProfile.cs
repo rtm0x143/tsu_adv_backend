@@ -3,6 +3,7 @@ using Auth.Mappers.Generated;
 using Common.App.Exceptions;
 using OneOf;
 using EmptyResult = Common.App.Models.Results.EmptyResult;
+using CustomerEntity = Auth.Infra.Data.Entities.Customer;
 
 namespace Auth.Features.Customer.Commands
 {
@@ -13,8 +14,7 @@ namespace Auth.Features.Customer.Commands
 
         public async Task<OneOf<EmptyResult, Exception>> Execute(ChangeProfileCommand command)
         {
-            if (await _userManager.FindByIdAsync(command.CustomerId.ToString()) is not Infra.Data.Entities.Customer
-                customer)
+            if (await _userManager.FindByIdAsync(command.CustomerId.ToString()) is not CustomerEntity customer)
                 return new KeyNotFoundException(nameof(command.CustomerId));
 
             command.ProfileDto.AdaptTo(customer); 

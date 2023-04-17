@@ -10,7 +10,7 @@ public static class ConfigureDbContextExtensions
     /// </summary>
     /// <returns><paramref name="services"/></returns>
     /// <exception cref="ArgumentException">When extracting connection string fron <paramref name="configuration"/> failed</exception>
-    public static IServiceCollection AddAppUserDbContext(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddAuthDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         var connection = configuration.GetValue<string>("AUTH_DB_CONN")
                          ?? configuration.GetConnectionString("Default")

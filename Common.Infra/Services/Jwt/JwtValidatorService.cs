@@ -12,23 +12,23 @@ namespace Common.Infra.Services.Jwt;
 internal class JwtValidatorService : IJwtValidator, ITokenValidationParametersProvider
 {
     /// <summary>
-    /// Creates new <see cref="TokenValidationParameters"/> using data from <paramref name="props"/>
+    /// Creates new <see cref="TokenValidationParameters"/> using data from <paramref name="options"/>
     /// </summary>
     /// <inheritdoc cref="JwtConfigurationProperties.ReadConfiguration(IConfiguration)"/>
-    public static TokenValidationParameters CreateValidationParameters(JwtConfigurationProperties props)
+    public static TokenValidationParameters CreateValidationParameters(JwtValidationOptions options)
     {
         var parameters = new TokenValidationParameters
         {
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(props.SigningKey)),
-            ValidAlgorithms = props.ValidAlgorithms,
-            ValidateIssuer = !props.Issuers.IsNullOrEmpty(),
-            ValidateAudience = !props.Audiences.IsNullOrEmpty()
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.SigningKey)),
+            ValidAlgorithms = options.ValidAlgorithms,
+            ValidateIssuer = !options.Issuers.IsNullOrEmpty(),
+            ValidateAudience = !options.Audiences.IsNullOrEmpty()
         };
 
-        parameters.ValidIssuers = parameters.ValidateIssuer ? props.Issuers.Append(props.ApplicationId) : null;
-        parameters.ValidAudiences = parameters.ValidateAudience ? props.Audiences.Append(props.ApplicationId) : null;
+        parameters.ValidIssuers = parameters.ValidateIssuer ? options.Issuers.Append(options.ApplicationId) : null;
+        parameters.ValidAudiences = parameters.ValidateAudience ? options.Audiences.Append(options.ApplicationId) : null;
 
         return parameters;
     }
@@ -38,7 +38,7 @@ internal class JwtValidatorService : IJwtValidator, ITokenValidationParametersPr
     /// <summary>
     /// Creates new <see cref="JwtValidatorService"/> instance
     /// </summary>
-    public JwtValidatorService(IOptions<JwtConfigurationProperties> options)
+    public JwtValidatorService(IOptions<JwtValidationOptions> options)
     {
         ValidationParameters = CreateValidationParameters(options.Value);
     }
