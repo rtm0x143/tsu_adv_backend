@@ -3,9 +3,7 @@ using Auth.Infra.Data.Entities;
 using Auth.Infra.Data.IdentityServices;
 using Common.App.Exceptions;
 using Common.App.Models.Results;
-using Common.Infra.Auth;
 using Common.Infra.Dal;
-using Microsoft.EntityFrameworkCore;
 using OneOf;
 
 namespace Auth.Features.User.Commands;

@@ -1,4 +1,5 @@
-﻿using Auth.Features.Customer.Queries;
+﻿using Auth.Features.Customer.Common;
+using Auth.Features.Customer.Queries;
 using Auth.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

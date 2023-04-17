@@ -1,6 +1,6 @@
 using System;
 using System.Linq.Expressions;
-using Auth.Features.Customer.Queries;
+using Auth.Features.Customer.Common;
 using Auth.Infra.Data.Entities;
 
 namespace Auth.Mappers.Generated
@@ -9,12 +9,38 @@ namespace Auth.Mappers.Generated
     {
         public static CustomerProfileDto AdaptToProfileDto(this Customer p1)
         {
-            return p1 == null ? null : new CustomerProfileDto(null, p1.Email, p1.PhoneNumber, p1.Gender, p1.BirthDate, p1.Address);
+            return p1 == null ? null : new CustomerProfileDto()
+            {
+                Address = p1.Address,
+                Email = p1.Email,
+                PhoneNumber = p1.PhoneNumber,
+                Gender = p1.Gender,
+                BirthDate = p1.BirthDate
+            };
         }
         public static CustomerProfileDto AdaptTo(this Customer p2, CustomerProfileDto p3)
         {
-            return p2 == null ? null : new CustomerProfileDto(null, p2.Email, p2.PhoneNumber, p2.Gender, p2.BirthDate, p2.Address);
+            if (p2 == null)
+            {
+                return null;
+            }
+            CustomerProfileDto result = p3 ?? new CustomerProfileDto();
+            
+            result.Address = p2.Address;
+            result.Email = p2.Email;
+            result.PhoneNumber = p2.PhoneNumber;
+            result.Gender = p2.Gender;
+            result.BirthDate = p2.BirthDate;
+            return result;
+            
         }
-        public static Expression<Func<Customer, CustomerProfileDto>> ProjectToProfileDto => p4 => new CustomerProfileDto(null, p4.Email, p4.PhoneNumber, p4.Gender, p4.BirthDate, p4.Address);
+        public static Expression<Func<Customer, CustomerProfileDto>> ProjectToProfileDto => p4 => new CustomerProfileDto()
+        {
+            Address = p4.Address,
+            Email = p4.Email,
+            PhoneNumber = p4.PhoneNumber,
+            Gender = p4.Gender,
+            BirthDate = p4.BirthDate
+        };
     }
 }

@@ -7,13 +7,13 @@ using Common.App.RequestHandlers;
 
 namespace Auth.Features.Auth.Commands;
 
-/// <exception cref="KeyNotFoundException">User by <paramref name="UsersEmail"/> not found</exception>
+/// <exception cref="KeyNotFoundException">User by <see cref="UsersEmail"/> not found</exception>
 /// <exception cref="InvalidCredentialException">When <paramref name="ChangePasswordToken"/> invalid</exception>
 /// <exception cref="UnsuitableDataException">When <paramref name="NewPassword"/> is bad</exception>
-public sealed record RecoverPasswordCommand([EmailAddress] string UsersEmail, string ChangePasswordToken, string NewPassword)
+public sealed record RecoverPasswordCommand(string ChangePasswordToken, string NewPassword)
     : IRequestWithException<EmptyResult>
 {
-    [EmailAddress] public string UsersEmail { get; set; } = UsersEmail;
+    [EmailAddress] public required string UsersEmail { get; set; } // explicit prop for framework use 
 }
 
 [RequestHandlerInterface]

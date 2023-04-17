@@ -1,6 +1,6 @@
 using System;
 using System.Linq.Expressions;
-using Auth.Features.Customer.Queries;
+using Auth.Features.Customer.Common;
 using Auth.Infra.Data.Entities;
 
 namespace Auth.Mappers.Generated

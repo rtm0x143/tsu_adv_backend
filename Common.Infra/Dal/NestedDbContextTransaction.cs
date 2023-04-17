@@ -1,40 +1,59 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using System.Transactions;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Common.Infra.Dal;
 
 public class NestedDbContextTransaction : IDbContextTransaction
 {
     private readonly IDbContextTransaction _transaction;
-    private readonly Guid _id;
-    private readonly string _savepoint;
+    private bool _isReleased;
 
-    private NestedDbContextTransaction(IDbContextTransaction transaction, Guid id, string savepointName)
+    private NestedDbContextTransaction(IDbContextTransaction transaction, Guid id)
     {
         _transaction = transaction;
-        _id = id;
-        _savepoint = savepointName;
+        TransactionId = id;
     }
 
-    internal static async Task<IDbContextTransaction> Create(IDbContextTransaction transaction)
+    const string SavePointName = "__NestedTransactionSavePoint";
+    internal static Task<IDbContextTransaction> Create(IDbContextTransaction transaction) =>
+        transaction.CreateSavepointAsync(SavePointName)
+            .ContinueWith<IDbContextTransaction>(t => new NestedDbContextTransaction(transaction, Guid.NewGuid()));
+
+    private ValueTask _tryReleaseAsync(CancellationToken cancellationToken = default) =>
+        _isReleased != (_isReleased = true)
+            ? new(_transaction.ReleaseSavepointAsync(SavePointName, cancellationToken))
+            : ValueTask.CompletedTask;
+
+    private void _tryRelease()
     {
-        var id = Guid.NewGuid();
-        var name = id.ToString();
-        await transaction.CreateSavepointAsync(name);
-        return new NestedDbContextTransaction(transaction, id, name);
+        if (_isReleased != (_isReleased = true)) _transaction.ReleaseSavepoint(SavePointName);
     }
 
-    public void Dispose() => _transaction.ReleaseSavepoint(_savepoint);
-    public ValueTask DisposeAsync() => new(_transaction.ReleaseSavepointAsync(_savepoint));
+    public void Dispose() => _tryRelease();
+    public ValueTask DisposeAsync() => _tryReleaseAsync();
 
-    public void Commit() => _transaction.ReleaseSavepoint(_savepoint);
+    public void Commit() => _transaction.ReleaseSavepoint(SavePointName);
 
-    public Task CommitAsync(CancellationToken cancellationToken = new CancellationToken()) =>
-        _transaction.ReleaseSavepointAsync(_savepoint, cancellationToken);
+    public Task CommitAsync(CancellationToken cancellationToken = new()) =>
+        _tryReleaseAsync(cancellationToken).AsTask();
 
-    public void Rollback() => _transaction.RollbackToSavepoint(_savepoint);
+    private void _trowIfReleased()
+    {
+        if (_isReleased)
+            throw new TransactionAbortedException($"{nameof(NestedDbContextTransaction)} already released savepoint");
+    }
 
-    public Task RollbackAsync(CancellationToken cancellationToken = new CancellationToken()) =>
-        _transaction.RollbackToSavepointAsync(_savepoint, cancellationToken);
+    public void Rollback()
+    {
+        _trowIfReleased();
+        _transaction.RollbackToSavepoint(SavePointName);
+    }
 
-    public Guid TransactionId => _id;
+    public Task RollbackAsync(CancellationToken cancellationToken = new())
+    {
+        _trowIfReleased();
+        return _transaction.RollbackToSavepointAsync(SavePointName, cancellationToken);
+    }
+
+    public Guid TransactionId { get; }
 }

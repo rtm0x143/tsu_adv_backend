@@ -1,5 +1,4 @@
-﻿using Auth.Features.Customer.Queries;
-using Auth.Infra.Data.Entities;
+﻿using Auth.Infra.Data.Entities;
 using Mapster;
 
 namespace Auth.Features.Common;

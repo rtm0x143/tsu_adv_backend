@@ -105,9 +105,6 @@
     <Compile Update="Features\Common\UserProfileDto.Mapper.cs">
       <DependentUpon>UserProfileDto.cs</DependentUpon>
     </Compile>
-    <Compile Update="Features\Customer\Queries\GetProfile.Mapping.cs">
-      <DependentUpon>IGetProfile.cs</DependentUpon>
-    </Compile>
     <Compile Update="Features\Customer\Queries\GetProfile.cs">
       <DependentUpon>IGetProfile.cs</DependentUpon>
     </Compile>
@@ -119,6 +116,21 @@
     </Compile>
     <Compile Update="Features\User\Queries\GetProfile.Presentation.cs">
       <DependentUpon>IGetProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Customer\Common\CustomerProfileDto.Mapper.cs">
+      <DependentUpon>CustomerProfileDto.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Commands\ChangeProfile.cs">
+      <DependentUpon>IChangeProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Customer\Commands\ChangeProfile.cs">
+      <DependentUpon>IChangeProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Customer\Commands\ChangeProfile.Presentation.cs">
+      <DependentUpon>IChangeProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Common\RefreshToken.Mapper.cs">
+      <DependentUpon>RefreshToken.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

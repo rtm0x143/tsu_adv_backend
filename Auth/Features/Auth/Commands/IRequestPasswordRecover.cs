@@ -8,7 +8,7 @@ namespace Auth.Features.Auth.Commands;
 public sealed record RequestPasswordRecoverCommand
     : IRequestWithException<EmptyResult, KeyNotFoundException>
 {
-    [EmailAddress] public required string UsersEmail { get; set; }
+    [EmailAddress] public required string UsersEmail { get; init; }  // explicit prop for framework use
 }
 
 [RequestHandlerInterface]

@@ -9,12 +9,38 @@ namespace Auth.Mappers.Generated
     {
         public static UserProfileDto AdaptToUserProfileDto(this AppUser p1)
         {
-            return p1 == null ? null : new UserProfileDto(p1.UserName, p1.Email, p1.PhoneNumber, p1.Gender, p1.BirthDate);
+            return p1 == null ? null : new UserProfileDto()
+            {
+                Email = p1.Email,
+                Fullname = p1.UserName,
+                PhoneNumber = p1.PhoneNumber,
+                Gender = p1.Gender,
+                BirthDate = p1.BirthDate
+            };
         }
         public static UserProfileDto AdaptTo(this AppUser p2, UserProfileDto p3)
         {
-            return p2 == null ? null : new UserProfileDto(p2.UserName, p2.Email, p2.PhoneNumber, p2.Gender, p2.BirthDate);
+            if (p2 == null)
+            {
+                return null;
+            }
+            UserProfileDto result = p3 ?? new UserProfileDto();
+            
+            result.Email = p2.Email;
+            result.Fullname = p2.UserName;
+            result.PhoneNumber = p2.PhoneNumber;
+            result.Gender = p2.Gender;
+            result.BirthDate = p2.BirthDate;
+            return result;
+            
         }
-        public static Expression<Func<AppUser, UserProfileDto>> ProjectToUserProfileDto => p4 => new UserProfileDto(p4.UserName, p4.Email, p4.PhoneNumber, p4.Gender, p4.BirthDate);
+        public static Expression<Func<AppUser, UserProfileDto>> ProjectToUserProfileDto => p4 => new UserProfileDto()
+        {
+            Email = p4.Email,
+            Fullname = p4.UserName,
+            PhoneNumber = p4.PhoneNumber,
+            Gender = p4.Gender,
+            BirthDate = p4.BirthDate
+        };
     }
 }

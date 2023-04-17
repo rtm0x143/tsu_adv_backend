@@ -13,6 +13,6 @@ public class RoleEntity : IdentityRole<Guid>
 
 public class AppUserRole : IdentityUserRole<Guid>
 {
-    public AppUser User { get; set; }
-    public RoleEntity Role { get; set; }
+    public AppUser User { get; set; } = default!;
+    public RoleEntity Role { get; set; } = default!;
 }

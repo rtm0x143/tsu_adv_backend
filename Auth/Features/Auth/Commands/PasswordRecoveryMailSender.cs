@@ -2,6 +2,7 @@
 using Auth.Infra.Data.Entities;
 using Common.App.Models.Results;
 using Common.App.Services;
+using Microsoft.AspNetCore.Identity;
 using OneOf;
 
 namespace Auth.Features.Auth.Commands;
@@ -11,7 +12,7 @@ public class PasswordRecoveryMailSender
     public required IMailSender Sender { get; init; }
 
     /// <returns>
-    /// <exception cref="ArgumentException">When <paramref name="user"/>s <see cref="AppUser.Email"/> is null</exception>
+    /// <exception cref="ArgumentException">When <paramref name="user"/>'s <see cref="Microsoft.AspNetCore.Identity.IdentityUser{Guid}.Email"/> is null</exception>
     /// </returns>
     public Task<OneOf<EmptyResult, ArgumentException>> SendRecoveryMessageFor(AppUser user, string recoveryToken)
     {

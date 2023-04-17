@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.Design;
-using Auth.Infra.Data.Entities;
+﻿using Auth.Infra.Data.Entities;
 using Common.Infra.Auth;
 using Common.Infra.Dal;
 using Microsoft.AspNetCore.Identity;

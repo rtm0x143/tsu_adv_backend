@@ -1,0 +1,27 @@
+﻿using Auth.Infra.Data.IdentityServices;
+using Auth.Mappers.Generated;
+using Common.App.Exceptions;
+using OneOf;
+using EmptyResult = Common.App.Models.Results.EmptyResult;
+
+namespace Auth.Features.Customer.Commands
+{
+    public class ChangeProfile : IChangeProfile
+    {
+        private readonly AuthUserManager _userManager;
+        public ChangeProfile(AuthUserManager userManager) => _userManager = userManager;
+
+        public async Task<OneOf<EmptyResult, Exception>> Execute(ChangeProfileCommand command)
+        {
+            if (await _userManager.FindByIdAsync(command.CustomerId.ToString()) is not Infra.Data.Entities.Customer
+                customer)
+                return new KeyNotFoundException(nameof(command.CustomerId));
+
+            command.ProfileDto.AdaptTo(customer); 
+
+            var result = await _userManager.UpdateAsync(customer);
+            if (!result.Succeeded) return UnsuitableDataException.FromIdentityResult(result);
+            return new EmptyResult();
+        }
+    }
+}

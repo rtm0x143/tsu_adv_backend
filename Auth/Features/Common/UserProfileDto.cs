@@ -3,13 +3,11 @@ using Auth.Infra.Data.Entities;
 
 namespace Auth.Features.Common;
 
-public record UserProfileDto(
-    string Fullname,
-    [EmailAddress] string Email,
-    string PhoneNumber,
-    Gender Gender,
-    DateOnly? BirthDate)
+public record UserProfileDto
 {
-    // ReSharper disable once RedundantExplicitPositionalPropertyDeclaration
-    [EmailAddress] public string Email { get; init; } = Email;
+    [EmailAddress] public string Email { get; set; } = default!; // explicit prop for framework use
+    public string Fullname { get; set; } = default!;
+    [Phone] public string PhoneNumber { get; set; } = default!;
+    public Gender Gender { get; set; }
+    public DateOnly? BirthDate { get; set; }
 }

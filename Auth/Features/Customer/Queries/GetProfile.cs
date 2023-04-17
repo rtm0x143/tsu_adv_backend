@@ -1,4 +1,5 @@
-﻿using Auth.Infra.Data;
+﻿using Auth.Features.Customer.Common;
+using Auth.Infra.Data;
 using Auth.Mappers.Generated;
 using Microsoft.EntityFrameworkCore;
 using OneOf;

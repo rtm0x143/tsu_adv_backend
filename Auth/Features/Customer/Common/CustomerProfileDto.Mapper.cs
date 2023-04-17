@@ -2,7 +2,7 @@
 using Auth.Infra.Data.Entities;
 using Mapster;
 
-namespace Auth.Features.Customer.Queries;
+namespace Auth.Features.Customer.Common;
 
 internal class CustomerProfileDtoMapper : IRegister
 {

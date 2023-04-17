@@ -7,10 +7,10 @@ using OneOf;
 
 namespace Auth.Features.Auth.Commands;
 
-public record LoginByPasswordCommand : 
+public sealed record LoginByPasswordCommand : 
     IRequest<OneOf<TokensResult, KeyNotFoundException, ActionFailedException>>
 {
-    [EmailAddress] public required string Email { get; set; }
+    [EmailAddress] public required string Email { get; init; }  // explicit prop for framework use
     public required string Password { get; set; }
 }
 
