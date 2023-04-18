@@ -10,8 +10,8 @@ namespace Common.App;
 
 [ApiController]
 [VersioningApiRoute]
-public abstract class CommonControllerBase<TConcreteController> : ControllerBase
-    where TConcreteController : CommonControllerBase<TConcreteController>
+public abstract class CommonApiControllerBase<TConcreteController> : ControllerBase
+    where TConcreteController : CommonApiControllerBase<TConcreteController>
 {
     [FromServices] public IExceptionsDescriber ExceptionsDescriber { get; init; } = default!;
     [FromServices] public ILogger<TConcreteController> Logger { get; init; } = default!;

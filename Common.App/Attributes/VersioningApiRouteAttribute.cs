@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Common.App.Attributes
 {
     /// <summary>
-    /// Specifies '/api/v{version:apiVersion}/[controller][/...]' route
+    /// Specifies '<see cref="RoutePrefix"/>/[controller][/...]' route
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class VersioningApiRouteAttribute : Attribute, IRouteTemplateProvider
@@ -12,36 +12,43 @@ namespace Common.App.Attributes
         /// <summary>
         /// Indicates should '[controller]' parameter be omitted
         /// </summary>
-        public bool OmitController { get; init; } = false;
+        public bool OmitController { get; init; }
 
-        public string? Template { get; } = "/api/v{version:apiVersion}";
+        public const string RoutePrefix = "/api/v{version:apiVersion}";
+        
+        protected readonly string SpecifiedTemplate = String.Empty;
 
-        public int? Order { get; set; }
+        public string Template
+        {
+            get
+            {
+                if (SpecifiedTemplate.StartsWith('/')) return SpecifiedTemplate;
+                var template = RoutePrefix;
 
-        public string? Name { get; set; }
+                if (!OmitController) template += "/[controller]";
+                if (template.Length != 0) template += $"/{SpecifiedTemplate}";
+                return template;
+            }
+        }
+
+        /// <inheritdoc cref="Order"/>
+        public int Order { get; init; }
+
+        int? IRouteTemplateProvider.Order => Order;
+
+        public string? Name { get; init; }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public VersioningApiRouteAttribute()
         {
-            if (!OmitController) Template += "/[controller]";
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="template"> If is not absolute path appends route otherwise replaces it /></param>
-        public VersioningApiRouteAttribute([StringSyntax("Route")] string template)
-        {
-            if (template.StartsWith('/'))
-            {
-                Template = template;
-                return;
-            }
-
-            if (!OmitController) Template += "/[controller]";
-            if (template.Length != 0) Template += $"/{template}";
-        }
+        public VersioningApiRouteAttribute([StringSyntax("Route")] string template) => SpecifiedTemplate = template;
     }
 }

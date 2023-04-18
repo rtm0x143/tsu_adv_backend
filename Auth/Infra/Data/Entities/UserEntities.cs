@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Auth.Infra.Data.Entities;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum Gender
 {
     Unspesified,

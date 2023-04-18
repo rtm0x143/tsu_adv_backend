@@ -1,6 +1,9 @@
-﻿namespace Common.Infra.Auth;
+﻿using System.Text.Json.Serialization;
+
+namespace Common.Infra.Auth;
 
 /// <summary> Preset widely used role names </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum CommonRoles
 {
     Customer,

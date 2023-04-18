@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Auth.Controllers;
 
 [ApiExplorerSettings(GroupName = "Auth")]
-public abstract class AuthControllerBase<TConcreteController> : CommonControllerBase<TConcreteController>
-    where TConcreteController : CommonControllerBase<TConcreteController>
+public abstract class AuthControllerBase<TConcreteController> : CommonApiControllerBase<TConcreteController>
+    where TConcreteController : CommonApiControllerBase<TConcreteController>
 {
     [FromServices] public IAuthorizationService AuthService { get; init; } = default!;
 }
