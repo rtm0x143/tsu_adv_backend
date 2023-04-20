@@ -25,11 +25,12 @@ builder.Services.AddInfraServices(builder.Configuration)
 
 builder.Services.AddCommonJwtBearerAuth();
 builder.Services.AddAuthAuthorization()
-    .AddCommonPolicyProvider()
-    .AddCommonPolicies();
+    .AddCommonPolicyProvider(configuration => configuration.AddCommonPolicies());
 
 builder.Services.AddUseCasesFrom(Assembly.GetExecutingAssembly())
     .AddCommonAppServices();
+
+builder.Services.AddRouting(configure => configure.LowercaseUrls = true);
 
 var app = builder.Build();
 

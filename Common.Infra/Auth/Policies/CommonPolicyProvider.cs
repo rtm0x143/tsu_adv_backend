@@ -4,45 +4,28 @@ using Microsoft.Extensions.Options;
 
 namespace Common.Infra.Auth.Policies;
 
-public class CommonPolicyProvider : IAuthorizationPolicyProvider
+public sealed partial class CommonPolicyProvider : IAuthorizationPolicyProvider
 {
-    internal static readonly List<Type> PolicyProviderTypes = new();
-    internal static Type? DefaultPolicyProviderType = null;
-    internal static Type? FallbackPolicyProviderType = null;
+    public required IAuthorizationPolicyProvider DefaultPolicyProvider { get; set; }
+    public required IAuthorizationPolicyProvider FallbackPolicyProvider { get; set; }
 
-    private readonly IAuthorizationPolicyProvider _defaultPolicyProvider;
-    private readonly IAuthorizationPolicyProvider _fallbackPolicyProvider;
+    public ICollection<IAuthorizationPolicyProvider> PolicyProviders { get; init; } =
+        new List<IAuthorizationPolicyProvider>();
 
-    private readonly IAuthorizationPolicyProvider[] _policyProviders;
-
-    public CommonPolicyProvider(IOptions<AuthorizationOptions> options, IServiceProvider serviceProvider)
+    internal CommonPolicyProvider()
     {
-        _defaultPolicyProvider
-            = (DefaultPolicyProviderType != null
-                  ? serviceProvider.GetRequiredService(DefaultPolicyProviderType) as IAuthorizationPolicyProvider
-                  : null)
-              ?? new DefaultAuthorizationPolicyProvider(options);
-        _fallbackPolicyProvider
-            = (FallbackPolicyProviderType != null
-                  ? serviceProvider.GetRequiredService(FallbackPolicyProviderType) as IAuthorizationPolicyProvider
-                  : null)
-              ?? new DefaultAuthorizationPolicyProvider(options);
-        _policyProviders = PolicyProviderTypes.Select(serviceProvider.GetRequiredService)
-            .Where(provider => provider is IAuthorizationPolicyProvider)
-            .Cast<IAuthorizationPolicyProvider>()
-            .ToArray();
     }
 
     public async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
-        foreach (var provider in _policyProviders)
+        foreach (var provider in PolicyProviders)
         {
             if (await provider.GetPolicyAsync(policyName) is AuthorizationPolicy policy) return policy;
         }
 
-        return await _defaultPolicyProvider.GetPolicyAsync(policyName);
+        return await DefaultPolicyProvider.GetPolicyAsync(policyName);
     }
 
-    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => _defaultPolicyProvider.GetDefaultPolicyAsync();
-    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() => _fallbackPolicyProvider.GetFallbackPolicyAsync();
+    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => DefaultPolicyProvider.GetDefaultPolicyAsync();
+    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() => FallbackPolicyProvider.GetFallbackPolicyAsync();
 }

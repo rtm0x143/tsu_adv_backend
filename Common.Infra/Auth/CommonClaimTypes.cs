@@ -17,4 +17,9 @@ public static class CommonClaimTypes
     /// Values are <see cref="CommonActionTypes"/> 
     /// </summary>
     public const string PersonalData = "PersonalData";
+
+    /// <summary>
+    /// Values are <see cref="CommonManageTargets"/>, indicates what targets can manage user
+    /// </summary>
+    public const string Manage = "Manage";
 }
