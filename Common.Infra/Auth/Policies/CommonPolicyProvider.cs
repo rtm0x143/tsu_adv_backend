@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Common.Infra.Auth.Policies;
 
-public sealed partial class CommonPolicyProvider : IAuthorizationPolicyProvider
+public sealed class CommonPolicyProvider : IAuthorizationPolicyProvider
 {
     public required IAuthorizationPolicyProvider DefaultPolicyProvider { get; set; }
     public required IAuthorizationPolicyProvider FallbackPolicyProvider { get; set; }
 
+    /// <summary>
+    /// Collection <see cref="IAuthorizationPolicyProvider"/> which <see cref="IAuthorizationPolicyProvider.GetPolicyAsync"/> should return null if handles unknown policy name 
+    /// </summary>
     public ICollection<IAuthorizationPolicyProvider> PolicyProviders { get; init; } =
         new List<IAuthorizationPolicyProvider>();
 

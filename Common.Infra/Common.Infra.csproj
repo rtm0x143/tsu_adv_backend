@@ -19,13 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Auth\Policies\GrantRolePolicy" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Auth\Policies\GrantRolePolicyProvider.cs">
-        <DependentUpon>GrantRolePolicy.cs</DependentUpon>
-      </Compile>
       <Compile Update="Auth\Policies\AuthorizeGrantRoleAttribute.cs">
         <DependentUpon>GrantRolePolicy.cs</DependentUpon>
       </Compile>
@@ -34,6 +27,18 @@
       </Compile>
       <Compile Update="Services\Jwt\ValidateJwtValidationOptions.cs">
         <DependentUpon>JwtValidationOptions.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Auth\Policies\CommonPolicyProvider.Configuration.cs">
+        <DependentUpon>CommonPolicyProvider.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Auth\Policies\CommonPolicyProvider.Factory.cs">
+        <DependentUpon>CommonPolicyProvider.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Auth\Policies\HasClaimPolicy.Provider.cs">
+        <DependentUpon>HasClaimPolicy.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Auth\Policies\AuthorizeHasClaimAttribute.cs">
+        <DependentUpon>HasClaimPolicy.cs</DependentUpon>
       </Compile>
     </ItemGroup>
 

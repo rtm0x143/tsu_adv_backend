@@ -6,8 +6,8 @@ namespace Common.Infra.Auth.Policies;
 public class CommonPolicyProviderConfiguration
 {
     public required IServiceCollection Services { get; init; }
-    public Type DefaultPolicyProviderType { get; private set; } = typeof(DefaultAuthorizationPolicyProvider);
-    public Type FallbackPolicyProviderType { get; private set; } = typeof(DefaultAuthorizationPolicyProvider);
+    public Type? DefaultPolicyProviderType { get; private set; }
+    public Type? FallbackPolicyProviderType { get; private set; }
 
     public IReadOnlyCollection<Type> PolicyProviderTypes => _policyProviderTypes;
     private readonly HashSet<Type> _policyProviderTypes = new();
@@ -16,6 +16,7 @@ public class CommonPolicyProviderConfiguration
     {
     }
 
+    /// <typeparam name="TPolicyProvider"><see cref="IAuthorizationPolicyProvider.GetPolicyAsync"/> should return null if handles unknown policy name</typeparam>
     public CommonPolicyProviderConfiguration AddPolicyProvider<TPolicyProvider>()
         where TPolicyProvider : class, IAuthorizationPolicyProvider
     {
@@ -46,6 +47,8 @@ public class CommonPolicyProviderConfiguration
         {
             options.AddPolicy(InRestaurantPolicy.Name, InRestaurantPolicy.Instanse);
         });
-        return AddPolicyProvider<GrantRolePolicyProvider>();
+
+        Services.AddSingleton<IAuthorizationHandler, OrAbsolutePrivilegeHandler>();
+        return AddPolicyProvider<HasClaimPolicyProvider>();
     }
 }
