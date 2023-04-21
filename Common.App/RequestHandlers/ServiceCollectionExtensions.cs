@@ -14,7 +14,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">Target <see cref="IServiceCollection"/></param>
     /// <param name="assembly">An <see cref="Assembly"/> to search for implementations</param>
     /// <returns>Given <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddUseCasesFrom(this IServiceCollection services, Assembly assembly)
+    public static IServiceCollection AddRequestHandlersFrom(this IServiceCollection services, Assembly assembly)
     {
         foreach (var type in assembly.GetTypes().Where(t => !t.IsAbstract))
         {
