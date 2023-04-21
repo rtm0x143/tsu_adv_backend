@@ -1,6 +1,5 @@
 ﻿using Auth.Features.Auth.Commands;
 using Auth.Features.Auth.Common;
-using Auth.Features.Common;
 using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
 using Common.App.Exceptions;

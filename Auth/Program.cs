@@ -27,7 +27,7 @@ builder.Services.AddCommonJwtBearerAuth();
 builder.Services.AddAuthAuthorization()
     .AddCommonPolicyProvider(configuration => configuration.AddCommonPolicies());
 
-builder.Services.AddUseCasesFrom(Assembly.GetExecutingAssembly())
+builder.Services.AddRequestHandlersFrom(Assembly.GetExecutingAssembly())
     .AddCommonAppServices();
 
 builder.Services.AddRouting(configure => configure.LowercaseUrls = true);

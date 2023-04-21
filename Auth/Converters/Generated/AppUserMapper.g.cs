@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using Auth.Features.Common;
 using Auth.Infra.Data.Entities;
 
-namespace Auth.Mappers.Generated
+namespace Auth.Converters
 {
     public static partial class AppUserMapper
     {

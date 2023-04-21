@@ -1,7 +1,7 @@
 ﻿using Auth.Features.RestaurantOwner.Commands;
 using Auth.Features.User.Commands;
 using Auth.Infra.Auth.Policies;
-using Auth.Mappers.Generated;
+using Auth.Converters;
 using Common.App.Models.Results;
 using Common.Infra.Auth;
 using Microsoft.AspNetCore.Authorization;

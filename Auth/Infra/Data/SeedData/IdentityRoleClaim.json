@@ -70,5 +70,64 @@
     "RoleId": "3a582199-77b1-4352-a61a-fce564ebb8d4",
     "ClaimType": "PersonalData",
     "ClaimValue": "Change"
+  },
+  
+  {
+    "Id": 16,
+    "RoleId": "761a9b67-f1e1-49b0-9a84-38e40be52d19",
+    "ClaimType": "Manage",
+    "ClaimValue": "Menu"
+  },
+  {
+    "Id": 17,
+    "RoleId": "761a9b67-f1e1-49b0-9a84-38e40be52d19",
+    "ClaimType": "Manage",
+    "ClaimValue": "Kitchen"
+  },
+  {
+    "Id": 18,
+    "RoleId": "761a9b67-f1e1-49b0-9a84-38e40be52d19",
+    "ClaimType": "Manage",
+    "ClaimValue": "Delivery"
+  },
+
+  {
+    "Id": 19,
+    "RoleId": "33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82",
+    "ClaimType": "Manage",
+    "ClaimValue": "Menu"
+  },
+  {
+    "Id": 20,
+    "RoleId": "33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82",
+    "ClaimType": "Manage",
+    "ClaimValue": "Kitchen"
+  },
+  {
+    "Id": 21,
+    "RoleId": "33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82",
+    "ClaimType": "Manage",
+    "ClaimValue": "Delivery"
+  },
+
+  {
+    "Id": 22,
+    "RoleId": "89efd21c-aa39-449a-97b2-474646701433",
+    "ClaimType": "Manage",
+    "ClaimValue": "Delivery"
+  },
+
+  {
+    "Id": 23,
+    "RoleId": "59eebf24-ad0f-4bcb-b514-4c72376253ec",
+    "ClaimType": "Manage",
+    "ClaimValue": "Kitchen"
+  },
+
+  {
+    "Id": 24,
+    "RoleId": "7e63d4dc-c365-45f8-9bd5-3e83d9f571bc",
+    "ClaimType": "Manage",
+    "ClaimValue": "Menu"
   }
 ]

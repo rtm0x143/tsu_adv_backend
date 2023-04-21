@@ -1,5 +1,4 @@
 ﻿using Auth.Features.Common;
-using Auth.Infra.Data.Entities;
 using Common.App.Attributes;
 using Common.App.RequestHandlers;
 

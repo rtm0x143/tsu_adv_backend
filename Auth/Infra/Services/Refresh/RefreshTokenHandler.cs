@@ -1,7 +1,7 @@
 ﻿using Auth.Features.Auth.Common;
 using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
-using Auth.Mappers.Generated;
+using Auth.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

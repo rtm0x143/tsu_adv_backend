@@ -1,7 +1,7 @@
 using Auth.Features.Auth.Common;
 using Auth.Infra.Data.Entities;
 
-namespace Auth.Mappers.Generated
+namespace Auth.Converters
 {
     public static partial class RefreshTokenMapper
     {

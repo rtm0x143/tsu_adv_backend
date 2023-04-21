@@ -1,7 +1,7 @@
 ﻿using Auth.Features.Courier.Commands;
 using Auth.Infra.Data.Entities;
 using Auth.Infra.Data.IdentityServices;
-using Auth.Mappers.Generated;
+using Auth.Converters;
 using Common.App.Exceptions;
 using Common.App.Models.Results;
 using Common.Infra.Auth;

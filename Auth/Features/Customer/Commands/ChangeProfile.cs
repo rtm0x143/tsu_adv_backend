@@ -1,5 +1,5 @@
 ﻿using Auth.Infra.Data.IdentityServices;
-using Auth.Mappers.Generated;
+using Auth.Converters;
 using Common.App.Exceptions;
 using OneOf;
 using EmptyResult = Common.App.Models.Results.EmptyResult;

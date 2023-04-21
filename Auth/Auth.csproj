@@ -22,6 +22,8 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.0.0" />
     <PackageReference Include="Mapster" Version="7.4.0-pre06" />
+    <PackageReference Include="MassTransit" Version="8.0.14" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
@@ -43,7 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mappers" />
     <Folder Include="Migrations" />
   </ItemGroup>
 
@@ -132,13 +133,22 @@
     <Compile Update="Features\Auth\Common\RefreshToken.Mapper.cs">
       <DependentUpon>RefreshToken.cs</DependentUpon>
     </Compile>
+    <Compile Update="Features\User\Commands\ChangeProfile.Presentation.cs">
+      <DependentUpon>IChangeProfile.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Auth\Commands\ChangePassword.cs">
+      <DependentUpon>IChangePassword.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Commands\DeleteUser.cs">
+      <DependentUpon>IDeleteUser.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <Target Name="Mapster" AfterTargets="AfterBuild">
     <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" /> 
-    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Mappers.Generated&quot; -o &quot;./Mappers/Generated&quot;" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster extension -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Mappers.Generated&quot; -o &quot;./Mappers/Generated&quot;" />
-    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Mappers.Generated&quot; -o &quot;./Mappers/Generated&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster extension -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
   </Target>
   
 </Project>

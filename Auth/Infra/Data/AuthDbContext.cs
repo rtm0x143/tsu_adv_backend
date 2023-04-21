@@ -24,10 +24,10 @@ public class AuthDbContext : IdentityDbContext<
     public DbSet<RestaurantAdmin> RestaurantAdmins { get; set; } = default!;
     public DbSet<Manager> Managers { get; set; } = default!;
     public DbSet<Cook> Cooks { get; set; } = default!;
-    
+
     public DbSet<RestaurantAssociationUserClaim> RestaurantAssociationRoleClaims { get; set; } = default!;
     public DbSet<Restaurant> Restaurants { get; set; } = default!;
-    
+
     public DbSet<UserRefreshToken> UserRefreshTokens { get; set; } = default!;
 
     public AuthDbContext(DbContextOptions options) : base(options)
@@ -39,7 +39,7 @@ public class AuthDbContext : IdentityDbContext<
         base.OnModelCreating(builder);
 
         builder.Entity<AppUser>().UseTphMappingStrategy();
-        
+
         builder.Entity<AppUserRole>()
             .HasOne<RoleEntity>(e => e.Role)
             .WithMany(e => e.AssociatedUsers)
@@ -54,7 +54,7 @@ public class AuthDbContext : IdentityDbContext<
             .HasOne<Restaurant>()
             .WithMany()
             .HasForeignKey(c => c.RestaurantId);
-        
+
         var configuration = this.GetService<IConfiguration>();
         builder.SeedRolesData(configuration)
             .SeedIdentityRoleClaimData(configuration);

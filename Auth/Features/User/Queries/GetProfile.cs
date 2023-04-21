@@ -1,7 +1,7 @@
 ﻿
 using Auth.Features.Common;
 using Auth.Infra.Data;
-using Auth.Mappers.Generated;
+using Auth.Converters;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
 

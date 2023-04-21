@@ -1,7 +1,7 @@
 ﻿using Auth.Features.Manager.Commands;
 using Auth.Features.User.Commands;
 using Auth.Infra.Auth.Policies;
-using Auth.Mappers.Generated;
+using Auth.Converters;
 using Common.App.Models.Results;
 using Common.App.Utils;
 using Common.Infra.Auth;
@@ -48,7 +48,7 @@ namespace Auth.Features.Customer.Commands
             command.ManagerDto.AdaptTo(newUser);
 
             return _register.Execute(
-                new(newUser, command.ManagerDto.Password, CommonRoles.Cook, command.ManagerDto.RestaurantId));
+                new(newUser, command.ManagerDto.Password, CommonRoles.Manager, command.ManagerDto.RestaurantId));
         }
     }
 }

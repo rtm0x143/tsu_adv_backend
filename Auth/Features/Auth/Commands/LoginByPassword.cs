@@ -1,6 +1,7 @@
 ﻿using Auth.Features.Auth.Commands;
 using Auth.Features.Auth.Common;
 using Auth.Features.Common;
+using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
 using Common.App.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +13,10 @@ namespace Auth.Controllers
     public partial class AuthController
     {
         [HttpPost("login")]
-        public Task<ActionResult<TokensResult>> Login(LoginByPasswordCommand command,
+        public async Task<ActionResult<TokensResult>> Login(LoginByPasswordCommand command,
             [FromServices] ILoginByPassword login)
         {
-            return login.Execute(command).ContinueWith<ActionResult<TokensResult>>(t => t.Result.IsT0
+            return await login.Execute(command).ContinueWith<ActionResult<TokensResult>>(t => t.Result.IsT0
                 ? t.Result.AsT0
                 : Unauthorized());
         }

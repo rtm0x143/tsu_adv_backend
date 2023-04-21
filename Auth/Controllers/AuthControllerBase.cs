@@ -8,5 +8,4 @@ namespace Auth.Controllers;
 public abstract class AuthControllerBase<TConcreteController> : CommonApiControllerBase<TConcreteController>
     where TConcreteController : CommonApiControllerBase<TConcreteController>
 {
-    [FromServices] public IAuthorizationService AuthService { get; init; } = default!;
 }
