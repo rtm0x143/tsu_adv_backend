@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using Backend.Common.Dtos;
+using Backend.Converters;
 using Backend.Features.Restaurant.Common;
 using Backend.Features.Restaurant.Queries;
 using Backend.Infra.Data;
-using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +10,10 @@ namespace Backend.Controllers
 {
     public partial class RestaurantController
     {
-        [HttpGet("page")]
+        /// <summary>
+        /// Query restaurants paged 
+        /// </summary>
+        [HttpGet]
         public Task<ActionResult<RestaurantDto[]>> GetPaged([FromQuery] GetRestaurantsQuery query,
             [FromServices] IGetRestaurants getRestaurants)
         {
@@ -32,7 +35,7 @@ namespace Backend.Features.Restaurant.Queries
             return _context.Restaurants
                 .Where(restaurant => restaurant.Id > query.Pagination.AfterRecord)
                 .Take((int)query.Pagination.PageSize)
-                .ProjectToType<RestaurantDto>()
+                .Select(RestaurantMapper.ProjectToDto)
                 .ToArrayAsync();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Common.App.Exceptions;
+using Common.Domain.Exceptions;
 using OneOf;
 
 namespace Auth.Features.Auth.Common;
@@ -17,9 +18,9 @@ public class RefreshToken
     public static OneOf<RefreshToken, ArgumentException> Construct(Guid id, Guid associatedUserId, DateTime expiration,
         bool isUsed)
     {
-        if (id == default) return new ArgumentException(nameof(id));
-        if (associatedUserId == default) return new ArgumentException(nameof(associatedUserId));
-        if (expiration == default) return new ArgumentException(nameof(expiration));
+        if (id == default) return new HadDefaultValueException(nameof(id));
+        if (associatedUserId == default) return new HadDefaultValueException(nameof(associatedUserId));
+        if (expiration == default) return new HadDefaultValueException(nameof(expiration));
 
         return new RefreshToken
         {

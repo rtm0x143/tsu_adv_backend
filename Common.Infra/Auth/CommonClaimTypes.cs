@@ -14,7 +14,7 @@ public static class CommonClaimTypes
 
     /// <summary>
     /// Indicates what can user do with personal data of other users
-    /// Values are <see cref="CommonActionTypes"/> 
+    /// Values are <see cref="CommonActionType"/> 
     /// </summary>
     public const string PersonalData = "PersonalData";
 

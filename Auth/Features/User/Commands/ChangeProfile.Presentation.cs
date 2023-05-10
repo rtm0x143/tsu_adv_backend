@@ -1,6 +1,8 @@
 ﻿using Auth.Features.Common;
 using Auth.Features.User.Commands;
 using Auth.Infra.Auth.Policies;
+using Common.App.Utils;
+using Common.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +19,7 @@ public partial class UserController
         if (!Guid.TryParse(GetUserId(), out var id)) return Task.FromResult(InvalidTokenPayload());
 
         return changeProfile.Execute(new(id, profileDto))
-            .ContinueWith<ActionResult>(t => t.Result.IsT0
+            .ContinueWith<ActionResult>(t => t.Result.Succeeded()
                 ? Ok()
                 : ExceptionsDescriber.Describe(t.Result.Value));
     }
@@ -27,7 +29,7 @@ public partial class UserController
     public async Task<ActionResult> ChangeProfile(Guid userId, UserProfileDto profileDto,
         [FromServices] IChangeProfile changeProfile)
     {
-        var authResult = await AuthService.AuthorizeAsync(User, null, new ChangePersonalDataRequirement(userId));
+        var authResult = await AuthService.AuthorizeAsync(User, null, ActionOnPersonalDataRequirement.Change(userId));
         if (!authResult.Succeeded) return Forbid();
 
         var result = await changeProfile.Execute(new(userId, profileDto));

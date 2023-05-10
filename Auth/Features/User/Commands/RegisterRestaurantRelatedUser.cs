@@ -2,7 +2,7 @@
 using Auth.Infra.Data.Entities;
 using Auth.Infra.Data.IdentityServices;
 using Common.App.Exceptions;
-using Common.App.Models.Results;
+using Common.Domain.ValueTypes;
 using Common.Infra.Dal;
 using OneOf;
 

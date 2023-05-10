@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backend.Infra.Data.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+using Backend.Features.Dish.Domain;
+using Backend.Features.Dish.Domain.ValueTypes;
 
 namespace Backend.Infra.Data.Entities;
 
@@ -14,5 +16,15 @@ public class Dish
     public bool IsVegetarian { get; set; }
 
     public List<Menu>? IntoMenus { get; set; }
-    public Guid RestaurantId { get; set; }
+
+    [ForeignKey(nameof(Restaurant))] public Guid RestaurantId { get; set; }
+    public Restaurant Restaurant { get; set; } = default!;
+
+    public class Rate
+    {
+        public float Score;
+        public ulong Count;
+    }
+
+    public Rate CachedRate { get; set; } = null!;
 }

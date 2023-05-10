@@ -2,7 +2,7 @@
 using Auth.Infra.Data.IdentityServices;
 using Auth.Converters;
 using Common.App.Exceptions;
-using Common.App.Models.Results;
+using Common.Domain.ValueTypes;
 using OneOf;
 
 namespace Auth.Features.User.Commands;

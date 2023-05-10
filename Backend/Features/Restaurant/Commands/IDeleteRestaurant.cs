@@ -1,6 +1,6 @@
 ﻿using Common.App.Attributes;
-using Common.App.Models.Results;
 using Common.App.RequestHandlers;
+using Common.Domain.ValueTypes;
 
 namespace Backend.Features.Restaurant.Commands;
 

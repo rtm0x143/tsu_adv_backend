@@ -22,8 +22,6 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.0.0" />
     <PackageReference Include="Mapster" Version="7.4.0-pre06" />
-    <PackageReference Include="MassTransit" Version="8.0.14" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
@@ -34,14 +32,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+    <PackageReference Include="NServiceBus.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0" />
+    <PackageReference Include="NServiceBus.RabbitMQ" Version="8.0.3" />
     <PackageReference Include="OneOf" Version="3.0.243" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Common.App\Common.App.csproj" />
-    <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -142,6 +138,12 @@
     <Compile Update="Features\User\Commands\DeleteUser.cs">
       <DependentUpon>IDeleteUser.cs</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Backend\Backend.Messaging\Backend.Messaging.csproj" />
+    <ProjectReference Include="..\Common.App\Common.App.csproj" />
+    <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
   </ItemGroup>
 
   <Target Name="Mapster" AfterTargets="AfterBuild">

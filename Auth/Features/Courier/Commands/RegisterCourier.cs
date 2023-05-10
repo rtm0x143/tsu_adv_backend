@@ -3,7 +3,7 @@ using Auth.Infra.Data.Entities;
 using Auth.Infra.Data.IdentityServices;
 using Auth.Converters;
 using Common.App.Exceptions;
-using Common.App.Models.Results;
+using Common.Domain.ValueTypes;
 using Common.Infra.Auth;
 using Common.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Mvc;

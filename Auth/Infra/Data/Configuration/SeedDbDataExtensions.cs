@@ -6,6 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Auth.Infra.Data.Configuration;
 
+/// <summary>
+/// Deprecated
+/// </summary>
 public static class SeedDbDataExtensions
 {
     public static ModelBuilder SeedRolesData(this ModelBuilder builder, IConfiguration configuration)

@@ -69,7 +69,7 @@ public class RefreshTokenHandler : IRefreshTokenHandler
         }
         catch (Exception)
         {
-            return new ArgumentException("Token was invalid");
+            return new ArgumentException("Token was invalid", nameof(refreshTokenString));
         }
 
         var token = await _dbContext.UserRefreshTokens.FindAsync(tokenId);

@@ -1,4 +1,5 @@
 ﻿using System.Security.Authentication;
+using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

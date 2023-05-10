@@ -1,12 +1,14 @@
 ﻿using System.Security.Claims;
+using Asp.Versioning;
 using Auth.Features.Auth.Commands;
 using Auth.Features.Auth.Common;
 using Common.App.Exceptions;
 using Common.App.Utils;
+using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
-using EmptyResult = Common.App.Models.Results.EmptyResult;
+using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 
 namespace Auth.Controllers
 {

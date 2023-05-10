@@ -1,7 +1,7 @@
 ﻿using Auth.Features.Common;
 using Common.App.Attributes;
-using Common.App.Models.Results;
 using Common.App.RequestHandlers;
+using Common.Domain.ValueTypes;
 
 namespace Auth.Features.Courier.Commands;
 

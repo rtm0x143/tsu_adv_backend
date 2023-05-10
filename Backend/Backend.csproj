@@ -5,27 +5,40 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DocumentationFile>bin\Debug\Backend.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Mapster" Version="7.4.0-pre06" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-preview.3.23174.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0-preview.3.23174.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+    <PackageReference Include="NServiceBus.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0" />
+    <PackageReference Include="NServiceBus.RabbitMQ" Version="8.0.3" />
     <PackageReference Include="SimpleBase" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Common.App\Common.App.csproj" />
+    <ProjectReference Include="..\Common.Domain\Common.Domain.csproj" />
     <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
+    <ProjectReference Include="Backend.Messaging\Backend.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,8 +46,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Infra\Data\Entities\DishInCart.Configuration.cs">
-      <DependentUpon>DishInCart.cs</DependentUpon>
+    <Compile Update="Infra\Data\Entities\DishInBasket.Configuration.cs">
+      <DependentUpon>DishInBasket.cs</DependentUpon>
     </Compile>
     <Compile Update="Infra\Data\Entities\DishInOrder.Configuration.cs">
       <DependentUpon>DishInOrder.cs</DependentUpon>
@@ -48,8 +61,8 @@
     <Compile Update="Infra\Data\Entities\Dish.Configuration.cs">
       <DependentUpon>Dish.cs</DependentUpon>
     </Compile>
-    <Compile Update="Common\Dtos\DishShortDto.Mapper.cs">
-      <DependentUpon>DishShortDto.cs</DependentUpon>
+    <Compile Update="Common\Dtos\DishDtos.Mapping.cs">
+      <DependentUpon>DishDtos.cs</DependentUpon>
     </Compile>
     <Compile Update="Features\Basket\Commands\RemoveDish.cs">
       <DependentUpon>IRemoveDish.cs</DependentUpon>
@@ -87,12 +100,100 @@
     <Compile Update="Features\Restaurant\Queries\GetRestaurants.cs">
       <DependentUpon>IGetRestaurants.cs</DependentUpon>
     </Compile>
-    <Compile Update="Features\Restaurant\Common\RestaurantDtos.Mapping.cs">
-      <DependentUpon>RestaurantDtos.cs</DependentUpon>
+    <Compile Update="Common\Dtos\OrderDtos.Mapping.cs">
+      <DependentUpon>OrderDtos.cs</DependentUpon>
     </Compile>
-    <Compile Update="Features\Restaurant\Queries\GetRestaurantOrders.cs">
-      <DependentUpon>IGetRestaurantOrders.cs</DependentUpon>
+    <Compile Update="Features\Restaurant\Queries\GetRestaurants.Mapping.cs">
+      <DependentUpon>IGetRestaurants.cs</DependentUpon>
     </Compile>
+    <Compile Update="Infra\Data\Entities\OrderStatusLog.Configuration.cs">
+      <DependentUpon>OrderStatusLog.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Infra\Data\Entities\Order.Configuration.cs">
+      <DependentUpon>Order.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Commands\CreateOrder.cs">
+      <DependentUpon>ICreateOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Commands\CreateOrder.Mapping.cs">
+      <DependentUpon>ICreateOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Menu\Commands\CreateMenu.cs">
+      <DependentUpon>ICreateMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Queries\GetOrders.cs">
+      <DependentUpon>IGetOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Queries\GetByNumber.cs">
+      <DependentUpon>IGetByNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Queries\GetOrders.Presentation.cs">
+      <DependentUpon>IGetOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Commands\RepeatOrder.cs">
+      <DependentUpon>IRepeatOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Commands\ChangeOrderStatus.cs">
+      <DependentUpon>IChangeOrderStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Commands\ChangeOrderStatus.Authorization.cs">
+      <DependentUpon>IChangeOrderStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Commands\CreateDish.cs">
+      <DependentUpon>ICreateDish.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Commands\DeleteDish.cs">
+      <DependentUpon>IDeleteDish.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Commands\ChangeDish.Mapping.cs">
+      <DependentUpon>IChangeDish.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Commands\ChangeDish.cs">
+      <DependentUpon>IChangeDish.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Commands\RateDish.cs">
+      <DependentUpon>IRateDish.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Commands\RateDish.Authorization.cs">
+      <DependentUpon>IRateDish.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Queries\GetDishes.cs">
+      <DependentUpon>IGetDishes.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Queries\GetDishes.Mapping.cs">
+      <DependentUpon>IGetDishes.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Queries\GetById.cs">
+      <DependentUpon>IGetById.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Queries\GetDishes.Presentation.cs">
+      <DependentUpon>IGetDishes.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Order\Queries\GetOrders.Authorization.cs">
+      <DependentUpon>IGetOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Dish\Queries\CanUserRateDish.cs">
+      <DependentUpon>ICanUserRateDish.cs</DependentUpon>
+    </Compile>
+    <Compile Remove="Backend.Events\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Backend.Events\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Backend.Events\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Backend.Events\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Backend.Events\obj\Backend.Events.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="Backend.Events\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="Backend.Events\obj\project.packagespec.json" />
   </ItemGroup>
 
   <Target Name="Mapster" AfterTargets="AfterBuild">

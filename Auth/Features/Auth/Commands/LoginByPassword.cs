@@ -4,6 +4,7 @@ using Auth.Features.Common;
 using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
 using Common.App.Exceptions;
+using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;

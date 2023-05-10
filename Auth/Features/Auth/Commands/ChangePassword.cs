@@ -3,6 +3,7 @@ using Auth.Features.Auth.Common;
 using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
 using Common.App.Exceptions;
+using Common.Domain.Exceptions;
 using Common.Infra.Dal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

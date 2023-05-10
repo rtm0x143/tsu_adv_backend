@@ -1,28 +1,33 @@
 ﻿using Backend.Features.Menu.Commands;
 using Backend.Features.Menu.Common;
 using Backend.Infra.Data;
-using Common.App.Exceptions;
+using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using EmptyResult = Common.App.Models.Results.EmptyResult;
+using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 
 namespace Backend.Controllers
 {
     public partial class RestaurantController
     {
-        [Authorize]
+        /// <summary>
+        /// Create new menu in specified restaurant
+        /// </summary>
+        /// <response code="404"></response>
+        /// <response code="401"></response>
+        /// <response code="403">When user can't manage menu</response>
+        // [Authorize]
         [HttpPost("{restaurantId}/menu")]
         public async Task<ActionResult> CreateMenu(Guid restaurantId, MenuCreationDto menu,
             [FromServices] ICreateMenu createMenu)
         {
-            if (await AuthorizationServiceExtensions.AuthorizeAsync(AuthService, User,
-                    ManageMenuInRestaurantPolicy.Create(restaurantId)) is { Succeeded: false })
+            if (await AuthService.AuthorizeAsync(User, ManageMenuInRestaurantPolicy.Create(restaurantId))
+                is { Succeeded: false })
                 return Forbid();
 
-            var result = await createMenu.Execute(new(restaurantId, menu));
-            return result.IsT0 ? Ok() : ExceptionsDescriber.Describe(result.Value);
+            return await ExecuteRequest(createMenu, new(restaurantId, menu));
         }
     }
 }

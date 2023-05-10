@@ -2,8 +2,8 @@
 using Auth.Features.User.Commands;
 using Auth.Infra.Auth.Policies;
 using Auth.Converters;
-using Common.App.Models.Results;
 using Common.App.Utils;
+using Common.Domain.ValueTypes;
 using Common.Infra.Auth;
 using Common.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Authorization;

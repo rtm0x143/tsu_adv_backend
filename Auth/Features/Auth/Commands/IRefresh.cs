@@ -2,6 +2,7 @@
 using Common.App.Attributes;
 using Common.App.Exceptions;
 using Common.App.RequestHandlers;
+using Common.Domain.Exceptions;
 using OneOf;
 
 namespace Auth.Features.Auth.Commands;

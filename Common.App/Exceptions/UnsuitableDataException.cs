@@ -20,7 +20,7 @@ public class UnsuitableDataException : Exception
     /// <exception cref="ArgumentException">When <paramref name="result"/>.<see cref="IdentityResult.Succeeded"/> was true</exception>
     public static UnsuitableDataException FromIdentityResult(IdentityResult result)
     {
-        if (result.Succeeded) throw new ArgumentException($"{nameof(result)} was successful");
+        if (result.Succeeded) throw new ArgumentException("Result was successful", nameof(result));
         
         return new() { Problems = result.Errors.ToDictionary(e => e.Code, e => e.Description) };
     }

@@ -15,7 +15,8 @@ public static class ConfigureDbContextExtensions
         var connection = configuration.GetValue<string>("AUTH_DB_CONN")
                          ?? configuration.GetConnectionString("Default")
                          ?? throw new ArgumentException(
-                             "Failed to extract connection string from configuration. Expected 'AUTH_DB_CONN' env variable or [ConnectionStrings:Default] prop in settings.");
+                             "Failed to extract connection string from configuration. Expected 'AUTH_DB_CONN' env variable or [ConnectionStrings:Default] prop in settings.",
+                             nameof(configuration));
 
         return services.AddDbContext<AuthDbContext>(
             configure => configure.UseNpgsql(connection));

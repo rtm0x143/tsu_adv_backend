@@ -1,9 +1,7 @@
-﻿using Auth.Infra.Data.Configuration;
-using Auth.Infra.Data.Entities;
+﻿using Auth.Infra.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Auth.Infra.Data;
 
@@ -55,8 +53,9 @@ public class AuthDbContext : IdentityDbContext<
             .WithMany()
             .HasForeignKey(c => c.RestaurantId);
 
-        var configuration = this.GetService<IConfiguration>();
-        builder.SeedRolesData(configuration)
-            .SeedIdentityRoleClaimData(configuration);
+        // Deprecated
+        // var configuration = this.GetService<IConfiguration>();
+        // builder.SeedRolesData(configuration)
+        //     .SeedIdentityRoleClaimData(configuration);
     }
 }

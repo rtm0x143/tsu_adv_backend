@@ -1,6 +1,7 @@
 ﻿using Auth.Features.Customer.Commands;
 using Auth.Features.Customer.Common;
 using Auth.Infra.Auth.Policies;
+using Common.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,8 @@ public partial class CustomerController
         CustomerProfileDto profileDto,
         [FromServices] IChangeProfile changeProfile)
     {
-        var authResult = await AuthService.AuthorizeAsync(User, null, new ChangePersonalDataRequirement(customerId));
+        var authResult = await AuthService
+            .AuthorizeAsync(User, null, ActionOnPersonalDataRequirement.Change(customerId));
         if (!authResult.Succeeded) return Forbid();
 
         var result = await changeProfile.Execute(new(customerId, profileDto));

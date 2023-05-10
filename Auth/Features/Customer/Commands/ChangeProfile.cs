@@ -2,7 +2,7 @@
 using Auth.Converters;
 using Common.App.Exceptions;
 using OneOf;
-using EmptyResult = Common.App.Models.Results.EmptyResult;
+using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 using CustomerEntity = Auth.Infra.Data.Entities.Customer;
 
 namespace Auth.Features.Customer.Commands

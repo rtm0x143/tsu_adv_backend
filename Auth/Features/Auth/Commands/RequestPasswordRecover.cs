@@ -5,7 +5,7 @@ using Common.App.Exceptions;
 using Common.App.Services;
 using Microsoft.AspNetCore.Mvc;
 using OneOf;
-using EmptyResult = Common.App.Models.Results.EmptyResult;
+using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 
 namespace Auth.Controllers
 {

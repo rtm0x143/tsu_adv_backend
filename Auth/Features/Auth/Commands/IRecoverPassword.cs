@@ -2,8 +2,8 @@
 using System.Security.Authentication;
 using Common.App.Attributes;
 using Common.App.Exceptions;
-using Common.App.Models.Results;
 using Common.App.RequestHandlers;
+using Common.Domain.ValueTypes;
 
 namespace Auth.Features.Auth.Commands;
 

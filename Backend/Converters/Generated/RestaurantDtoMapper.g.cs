@@ -1,6 +1,6 @@
 using System;
 using System.Linq.Expressions;
-using Backend.Features.Restaurant.Common;
+using Backend.Common.Dtos;
 using Backend.Infra.Data.Entities;
 
 namespace Backend.Converters

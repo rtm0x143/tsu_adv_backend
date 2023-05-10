@@ -1,6 +1,7 @@
 ﻿using Auth.Features.Customer.Common;
 using Auth.Features.Customer.Queries;
 using Auth.Infra.Auth.Policies;
+using Common.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ public partial class CustomerController
     public async Task<ActionResult<CustomerProfileDto>> GetProfile(Guid customerId,
         [FromServices] IGetProfile getProfile)
     {
-        var authResult = await AuthService.AuthorizeAsync(User, null, new ReadPersonalDataRequirement(customerId));
+        var authResult = await AuthService.AuthorizeAsync(User, null, ActionOnPersonalDataRequirement.Read(customerId));
         if (!authResult.Succeeded) return Forbid();
 
         var result = await getProfile.Execute(new(customerId));

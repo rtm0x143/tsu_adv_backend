@@ -37,8 +37,5 @@ public class ConfigureSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
                 Array.Empty<string>()
             }
         });
-        
-        // [ApiExplorerSettings(GroupName = "Backend")] on controller/action
-        // options.SwaggerDoc("Backend", new OpenApiInfo { Title = "Backend package" });
     }
 }

@@ -2,12 +2,11 @@ using System.Reflection;
 using Auth.Infra.Auth;
 using Auth.Infra.Data.Configuration;
 using Auth.Infra.Data.SeedData;
+using Auth.Infra.Messaging;
 using Auth.Infra.Services;
 using Common.App.Configure;
-using Common.App.Configure.Jwt;
 using Common.App.Configure.Swagger;
 using Common.App.RequestHandlers;
-using Common.App.Services;
 using Common.Infra.Auth.Configure;
 using Common.Infra.Services.SMTP;
 
@@ -24,20 +23,23 @@ builder.Services.AddInfraServices(builder.Configuration)
     .AddCommonSmtpServices(builder.Configuration);
 
 builder.Services.AddCommonJwtBearerAuth();
-builder.Services.AddAuthAuthorization()
-    .AddCommonPolicyProvider(configuration => configuration.AddCommonPolicies());
+builder.Services.AddAuthAuthorization();
 
 builder.Services.AddRequestHandlersFrom(Assembly.GetExecutingAssembly())
     .AddCommonAppServices();
 
 builder.Services.AddRouting(configure => configure.LowercaseUrls = true);
 
+builder.Host.ConfigureMessageBus();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseCommonSwagger();
-    await app.Services.SeedDevelopmentData();
+#pragma warning disable CS4014
+    app.Services.SeedDevelopmentData();
+#pragma warning restore CS4014
 }
 
 app.UseHttpsRedirection();

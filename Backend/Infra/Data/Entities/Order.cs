@@ -1,16 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backend.Infra.Data.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+using Backend.Features.Order.Domain;
+using Backend.Features.Order.Domain.ValueTypes;
 
 namespace Backend.Infra.Data.Entities;
 
 public class Order
 {
-    [Key] public long Number { get; set; }
+    [Key] public ulong Number { get; set; }
     public decimal Price { get; set; }
     public string Address { get; set; } = default!;
     public OrderStatus Status { get; set; }
 
-    public Restaurant Restaurant { get; set; }
+    [ForeignKey(nameof(Restaurant))] public Guid RestaurantId { get; set; }
+    public Restaurant Restaurant { get; set; } = null!;
     public List<DishInOrder>? Dishes { get; set; }
 
     public Guid UserId { get; set; }

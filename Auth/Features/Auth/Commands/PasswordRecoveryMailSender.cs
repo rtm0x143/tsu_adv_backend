@@ -1,7 +1,7 @@
 ﻿using System.Net.Mail;
 using Auth.Infra.Data.Entities;
-using Common.App.Models.Results;
 using Common.App.Services;
+using Common.Domain.ValueTypes;
 using Microsoft.AspNetCore.Identity;
 using OneOf;
 
@@ -18,7 +18,7 @@ public class PasswordRecoveryMailSender
     {
         if (user.Email == null)
             return Task.FromResult<OneOf<EmptyResult, ArgumentException>>(
-                new ArgumentException($"{nameof(user)}.{nameof(user.Email)} == null"));
+                new ArgumentException($"{nameof(user)}.{nameof(user.Email)} == null", nameof(user)));
 
         return Sender.Send(new MailMessage
         {

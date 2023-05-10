@@ -1,8 +1,8 @@
 ﻿using Auth.Infra.Data.Entities;
 using Common.App.Attributes;
 using Common.App.Exceptions;
-using Common.App.Models.Results;
 using Common.App.RequestHandlers;
+using Common.Domain.ValueTypes;
 using Common.Infra.Auth;
 
 namespace Auth.Features.User.Commands;

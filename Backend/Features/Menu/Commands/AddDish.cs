@@ -4,16 +4,22 @@ using Backend.Infra.Data;
 using Backend.Infra.Data.Entities;
 using Common.App.Exceptions;
 using Common.App.Utils;
+using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using EmptyResult = Common.App.Models.Results.EmptyResult;
+using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 
 namespace Backend.Controllers
 {
     public partial class RestaurantController
     {
+        /// <summary>Add dish to menu</summary>
+        /// <response code="409">When menu already has that dish</response>
+        /// <response code="404"></response>
+        /// <response code="401"></response>
+        /// <response code="403">When user can't manage menu</response>
         [Authorize]
         [HttpPost("{restaurantId}/menu/{menuName}/dish/{dishId}")]
         public async Task<ActionResult> AddDishToMenu(Guid restaurantId, string menuName, Guid dishId,
@@ -45,7 +51,7 @@ namespace Backend.Features.Menu.Commands
             if (menu == null)
                 return new KeyNotFoundException($"{nameof(command.RestaurantId)}+{nameof(command.MenuName)}");
 
-            if (await _context.Dishes.FindAsync(command.DishId) is not Dish dish)
+            if (await _context.Dishes.FindAsync(command.DishId) is not Infra.Data.Entities.Dish dish)
                 return new KeyNotFoundException(nameof(command.DishId));
 
             if (menu.Dishes!.Contains(dish)) return new CollisionException("Menu Already contains such dish");

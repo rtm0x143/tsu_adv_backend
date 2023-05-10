@@ -3,6 +3,7 @@ using Auth.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Auth.Features.User.Queries;
+using Common.Infra.Auth.Policies;
 
 // ReSharper disable once CheckNamespace
 namespace Auth.Controllers;
@@ -27,7 +28,7 @@ public partial class UserController
     [HttpGet("{userId:guid}/profile")]
     public async Task<ActionResult<UserProfileDto>> GetProfile(Guid userId, [FromServices] IGetProfile getProfile)
     {
-        var authResult = await AuthService.AuthorizeAsync(User, null, new ReadPersonalDataRequirement(userId));
+        var authResult = await AuthService.AuthorizeAsync(User, null, ActionOnPersonalDataRequirement.Read(userId));
         if (!authResult.Succeeded) return Forbid();
 
         var result = await getProfile.Execute(new(userId));

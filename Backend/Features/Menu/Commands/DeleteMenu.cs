@@ -1,19 +1,31 @@
 ﻿using Backend.Features.Menu.Commands;
+using Backend.Features.Menu.Common;
 using Backend.Infra.Data;
+using Common.App.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OneOf;
-using EmptyResult = Common.App.Models.Results.EmptyResult;
+using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 
 namespace Backend.Controllers
 {
     public partial class RestaurantController
     {
+        /// <summary>Delete some menu in specified restaurant</summary>
+        /// <response code="404"></response>
+        /// <response code="401"></response>
+        /// <response code="403">When user can't manage menu</response>
         [HttpDelete("{restaurantId}/menu/{menuName}")]
-        public Task<ActionResult> DeleteMenu(Guid restaurantId, string menuName, [FromServices] IDeleteMenu deleteMenu)
+        public async Task<ActionResult> DeleteMenu(Guid restaurantId, string menuName,
+            [FromServices] IDeleteMenu deleteMenu)
         {
-            return deleteMenu.Execute(new(restaurantId, menuName))
-                .ContinueWith<ActionResult>(t => t.Result.IsT0 ? Ok() : NotFound());
+            if (await AuthService.AuthorizeAsync(User, ManageMenuInRestaurantPolicy.Create(restaurantId))
+                is { Succeeded: false })
+                return Forbid();
+            
+            var result = await deleteMenu.Execute(new(restaurantId, menuName));
+            return result.Succeeded() ? Ok() : NotFound(result.Error().Message);
         }
     }
 }

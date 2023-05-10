@@ -20,7 +20,9 @@ public static class ManageMenuInRestaurantPolicy
     private static AuthorizationPolicy _create(Guid restaurantId) =>
         new AuthorizationPolicyBuilder()
             .RequireClaim(CommonClaimTypes.Manage, Enum.GetName(CommonManageTargets.Menu)!)
-            .AddRequirements(InRestaurantPolicy.CreateRequirement(restaurantId), OrInRoleRequirement.OrAdmin)
+            .AddRequirements(InRestaurantPolicy.CreateRequirement(restaurantId))
+            .OrAbsolutePrivilege(builder
+                => builder.RequireRole(nameof(CommonRoles.Admin)))
             .Build();
 
     public static AuthorizationPolicy Create(Guid restaurantId)
