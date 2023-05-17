@@ -4,7 +4,7 @@ using Common.App.RequestHandlers;
 
 namespace Backend.Features.Order.Queries;
 
-public sealed record GetByNumberQuery(OrderNumber Number) : IRequestWithException<OrderDto>;
+public sealed record GetByNumberQuery(ulong Number) : IRequestWithException<OrderDto>;
 
 [RequestHandlerInterface]
 public interface IGetByNumber : IRequestHandlerWithException<GetByNumberQuery, OrderDto>

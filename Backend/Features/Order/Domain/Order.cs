@@ -28,6 +28,10 @@ public partial class Order
     private List<OrderStatusLog> _statusLogs = null!;
     public IReadOnlyCollection<OrderStatusLog> StatusLogs => _statusLogs;
 
+    private Order()
+    {
+    }
+
     /// <exception cref="EmptyOrderException">When <paramref name="dishInOrders"/> is empty</exception>
     /// <exception cref="DifferentRestaurantException">When <paramref name="dishInOrders"/> contain dishes from different restaurants</exception>
     private static bool _validateDishesInOrder(IEnumerable<DishInOrder> dishInOrders,

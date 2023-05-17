@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Backend.Common.Dtos;
 using Backend.Converters;
 using Backend.Infra.Data.Entities;
+using Common.App.Dtos;
 
 namespace Backend.Converters
 {

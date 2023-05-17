@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using Backend.Common.Dtos;
 
-namespace Backend.Converters;
+namespace Common.App.Dtos;
 
 public class JsonOrderNumberConverter : JsonConverter<OrderNumber>
 {
@@ -11,11 +10,9 @@ public class JsonOrderNumberConverter : JsonConverter<OrderNumber>
         if (reader.GetString() is not string value)
             throw new JsonException($"Invalid json token in position {reader.Position.GetInteger()}");
 
-        return new OrderNumber(
-            OrderNumberFormatter.TryDecode(value, out var number) ? number : default,
-            value);
+        return new OrderNumber(OrderNumberFormatter.TryDecode(value, out var number) ? number : default);
     }
 
     public override void Write(Utf8JsonWriter writer, OrderNumber value, JsonSerializerOptions options) =>
-        writer.WriteStringValue(value.Base32String);
+        writer.WriteStringValue(value.String);
 }

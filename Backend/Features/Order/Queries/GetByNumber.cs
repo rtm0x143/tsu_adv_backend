@@ -2,6 +2,7 @@
 using Backend.Converters;
 using Backend.Features.Order.Queries;
 using Backend.Infra.Data;
+using Common.App.Dtos;
 using Common.App.Utils;
 using Common.Infra.Auth.Policies;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,7 @@ namespace Backend.Controllers
             [FromRoute] OrderNumber number,
             [FromServices] IGetByNumber getByNumber)
         {
-            var result = await getByNumber.Execute(new(number));
+            var result = await getByNumber.Execute(new(number.Numeric));
             if (!result.Succeeded()) return ExceptionsDescriber.Describe(result.Error());
             var order = result.Value();
 
@@ -45,7 +46,7 @@ namespace Backend.Features.Order.Queries
 
         public Task<OneOf<OrderDto, Exception>> Execute(GetByNumberQuery query)
         {
-            return _context.Orders.Where(order => order.Number == query.Number.Numeric)
+            return _context.Orders.Where(order => order.Number == query.Number)
                 .Include(order => order.Dishes!)
                 .ThenInclude(inOrder => inOrder.Dish)
                 .Include(order => order.Restaurant)

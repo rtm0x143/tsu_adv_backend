@@ -30,15 +30,7 @@
     <PackageReference Include="NServiceBus.Extensions.DependencyInjection" Version="2.0.0" />
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="2.0.0" />
     <PackageReference Include="NServiceBus.RabbitMQ" Version="8.0.3" />
-    <PackageReference Include="SimpleBase" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Common.App\Common.App.csproj" />
-    <ProjectReference Include="..\Common.Domain\Common.Domain.csproj" />
-    <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
-    <ProjectReference Include="Backend.Messaging\Backend.Messaging.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -176,24 +168,39 @@
       <DependentUpon>ICanUserRateDish.cs</DependentUpon>
     </Compile>
     <Compile Remove="Backend.Events\**" />
+    <Compile Remove="Backend.Messaging\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="Backend.Events\**" />
+    <EmbeddedResource Remove="Backend.Messaging\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Backend.Events\**" />
+    <None Remove="Backend.Messaging\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Backend.Events\**" />
+    <Content Remove="Backend.Messaging\**" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Backend.Events\obj\Backend.Events.csproj.nuget.dgspec.json" />
     <_ContentIncludedByDefault Remove="Backend.Events\obj\project.assets.json" />
     <_ContentIncludedByDefault Remove="Backend.Events\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="Backend.Messaging\bin\Debug\net7.0\Backend.Messaging.deps.json" />
+    <_ContentIncludedByDefault Remove="Backend.Messaging\obj\Backend.Messaging.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="Backend.Messaging\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="Backend.Messaging\obj\project.packagespec.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.App\Common.App.csproj" />
+    <ProjectReference Include="..\Common.Domain\Common.Domain.csproj" />
+    <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
+    <ProjectReference Include="Backend.Messaging\Backend.Messaging.csproj" />
   </ItemGroup>
 
   <Target Name="Mapster" AfterTargets="AfterBuild">

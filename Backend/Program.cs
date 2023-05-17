@@ -7,6 +7,7 @@ using Common.App.Configure;
 using Common.App.Configure.Swagger;
 using Common.App.RequestHandlers;
 using Common.Infra.Auth.Configure;
+using Common.Infra.Messaging;
 using Common.Infra.Services.Jwt;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.OpenApi.Models;
@@ -22,12 +23,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddRouting(configure => configure.LowercaseUrls = true);
 
 builder.Services.AddCommonVersioning();
-builder.Services.AddCommonSwagger()
-    .AddSwaggerGen(options =>
-    {
-        options.MapType<OrderNumber>(() => new OpenApiSchema
-            { Type = "string", Format = "string", Title = "Base32 crockford encoded 64-bit integer" });
-    });
+builder.Services.AddCommonSwagger();
 
 builder.Services.AddBackendDbContexts(builder.Configuration);
 
@@ -43,7 +39,7 @@ builder.Services.AddCommonAppServices()
 
 builder.Services.AddDishFeatureServices();
 
-builder.Host.ConfigureMessageBus();
+builder.Host.ConfigureMessageBus<BackendMessageBusConfiguration>();
 
 
 var app = builder.Build();

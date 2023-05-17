@@ -1,6 +1,7 @@
-﻿using SimpleBase;
+﻿using OneOf;
+using SimpleBase;
 
-namespace Backend.Converters;
+namespace Common.App.Dtos;
 
 public static class OrderNumberFormatter
 {
@@ -60,5 +61,15 @@ public static class OrderNumberFormatter
         }
 
         return new string(resultChars);
+    }
+
+    /// <summary>
+    /// Multiple strings can represent same order number, so that method re-encodes <paramref name="orderNumberString"/>
+    /// </summary>
+    public static OneOf<string, ArgumentException> ToInvariantString(string orderNumberString)
+    {
+        if (!TryDecode(orderNumberString, out var result))
+            return new ArgumentException("Specified string wasn't valid order number", nameof(orderNumberString));
+        return Encode(result);
     }
 }

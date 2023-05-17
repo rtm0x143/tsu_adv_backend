@@ -8,22 +8,20 @@ namespace Common.App.Configure.Swagger;
 
 public static class SwaggerConfigurationExtensions
 {
-    public static IServiceCollection AddCommonSwagger(this IServiceCollection services)
-    {   
+    public static IServiceCollection AddCommonSwagger(this IServiceCollection services,
+        Action<SwaggerGenOptions>? optionsAction = null)
+    {
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerGenOptions>();
         services.AddTransient<IConfigureOptions<SwaggerUIOptions>, ConfigureSwaggerUIOptions>();
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureVersioningAppearance>();
-        
-        return services.AddSwaggerGen();
+
+        return services.AddSwaggerGen(optionsAction);
     }
 
     public static IApplicationBuilder UseCommonSwagger(this IApplicationBuilder builder)
     {
-        builder.UseSwagger(setup =>
-        {
-            setup.RouteTemplate = "swagger/{documentName}.json";
-        });
+        builder.UseSwagger(setup => { setup.RouteTemplate = "swagger/{documentName}.json"; });
 
         return builder.UseSwaggerUI();
     }

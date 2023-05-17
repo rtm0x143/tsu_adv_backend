@@ -1,10 +1,10 @@
 ﻿using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
-using Backend.Messaging.Events;
+using Backend.Messaging.Messages.Events;
 using Microsoft.EntityFrameworkCore;
 using NServiceBus;
 
-namespace Auth.Events;
+namespace Auth.EventHandlers;
 
 public class RestaurantCreatedEventHandler : IHandleMessages<RestaurantCreatedEvent>
 {

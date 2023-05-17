@@ -1,7 +1,7 @@
 ﻿using Backend.Features.Restaurant.Commands;
 using Backend.Features.Restaurant.Common;
 using Backend.Infra.Data;
-using Backend.Messaging.Events;
+using Backend.Messaging.Messages.Events;
 using Common.App.Utils;
 using Common.Domain.Exceptions;
 using Common.Domain.ValueTypes;

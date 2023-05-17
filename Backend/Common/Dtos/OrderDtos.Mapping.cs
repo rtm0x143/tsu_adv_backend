@@ -1,5 +1,6 @@
 ﻿using Backend.Converters;
 using Backend.Infra.Data.Entities;
+using Common.App.Dtos;
 using Mapster;
 
 namespace Backend.Common.Dtos;

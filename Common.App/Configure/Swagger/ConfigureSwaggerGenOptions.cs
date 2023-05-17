@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Common.App.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -37,5 +38,8 @@ public class ConfigureSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
                 Array.Empty<string>()
             }
         });
+
+        options.MapType<OrderNumber>(() => new OpenApiSchema
+            { Type = "string", Format = "string", Title = "Base32 crockford encoded 64-bit integer" });
     }
 }

@@ -1,12 +1,12 @@
-﻿using Backend.Common.Dtos;
-using Backend.Features.Order.Commands;
-using Backend.Features.Order.Domain;
+﻿using Backend.Features.Order.Commands;
 using Backend.Features.Order.Domain.ValueTypes;
 using Backend.Features.Order.Infra;
-using Backend.Infra.Data;
+using Backend.Messaging.Messages.Events;
+using Common.App.Dtos;
 using Common.App.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NServiceBus;
 using OneOf;
 using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 
@@ -42,7 +42,13 @@ namespace Backend.Features.Order.Commands
     public class ChangeOrderStatus : IChangeOrderStatus
     {
         private readonly OrderDbContext _context;
-        public ChangeOrderStatus(OrderDbContext context) => _context = context;
+        private readonly IMessageSession _messageSession;
+
+        public ChangeOrderStatus(OrderDbContext context, IMessageSession messageSession)
+        {
+            _context = context;
+            _messageSession = messageSession;
+        }
 
         public async Task<OneOf<EmptyResult, Exception>> Execute(ChangeStatusCommand command)
         {
@@ -53,6 +59,12 @@ namespace Backend.Features.Order.Commands
             if (!result.Succeeded()) return result.Error();
 
             await _context.SaveChangesAsync();
+            await _messageSession.Publish(new OrderStatusChangedEvent(
+                OrderNumber: order.Number,
+                UserId: order.UserId,
+                OrderStatus: Enum.GetName(order.Status)!,
+                Description: result.Value().Details));
+
             return default;
         }
     }

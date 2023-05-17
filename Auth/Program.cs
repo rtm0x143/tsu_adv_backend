@@ -8,6 +8,7 @@ using Common.App.Configure;
 using Common.App.Configure.Swagger;
 using Common.App.RequestHandlers;
 using Common.Infra.Auth.Configure;
+using Common.Infra.Messaging;
 using Common.Infra.Services.SMTP;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,7 @@ builder.Services.AddRequestHandlersFrom(Assembly.GetExecutingAssembly())
 
 builder.Services.AddRouting(configure => configure.LowercaseUrls = true);
 
-builder.Host.ConfigureMessageBus();
+builder.Host.ConfigureMessageBus<AuthMessageBusConfiguration>();
 
 var app = builder.Build();
 

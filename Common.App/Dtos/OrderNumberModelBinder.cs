@@ -1,7 +1,7 @@
-﻿using Backend.Common.Dtos;
+﻿using Common.App.Utils;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Backend.Converters;
+namespace Common.App.Dtos;
 
 public class OrderNumberModelBinder : IModelBinder
 {
@@ -19,7 +19,7 @@ public class OrderNumberModelBinder : IModelBinder
                 bindingContext.ModelState.AddModelError(bindingContext.ModelName, "Invalid value format");
             else
                 validValues.Add(bindingContext.ModelType == typeof(OrderNumber)
-                    ? new OrderNumber(result, value)
+                    ? new OrderNumber(result)
                     : result);
         }
 
