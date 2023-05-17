@@ -1,0 +1,17 @@
+﻿@using System.Linq.Expressions
+@model SignInViewModel
+
+@{
+    ViewBag.Title = "Sign In";
+    Layout = "_Layout";
+}
+
+<h2>Sign In</h2>
+
+
+@using (Html.BeginForm("SignIn", "SignIn"))
+{
+    @Html.EditorForModel()
+    <br/>
+    <input type="submit" value="Submit"/>
+}
