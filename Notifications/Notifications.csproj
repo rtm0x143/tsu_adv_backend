@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\Notifications.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Backend\Backend.Messaging\Backend.Messaging.csproj" />
+      <ProjectReference Include="..\Common.App\Common.App.csproj" />
+      <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Mapster" Version="7.3.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+      <PackageReference Include="NServiceBus.Extensions.DependencyInjection" Version="2.0.0" />
+      <PackageReference Include="NServiceBus.RabbitMQ" Version="8.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="ClientSample\libman.json" />
+      <_ContentIncludedByDefault Remove="ClientSample\lib\microsoft\signalr\package.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Converters" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Features\Common\ExtensibleNotification.Mapper.cs">
+        <DependentUpon>ExtensibleNotification.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Features\Notifications\Commands\CommitNotification.cs">
+        <DependentUpon>ICommitNotification.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Features\Notifications\Queries\GetNotificationsByTopic.cs">
+        <DependentUpon>IGetNotificationsByTopic.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <Target Name="Mapster" AfterTargets="AfterBuild">
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster extension -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+        <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+    </Target>
+
+</Project>

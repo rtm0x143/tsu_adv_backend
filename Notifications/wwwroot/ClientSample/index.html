@@ -1,0 +1,29 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ClientSample</title>
+</head>
+<body>
+<h3>Print order number to subscribe for events</h3>
+<label for="orderNameInput"><input id="orderNameInput"/></label>
+<button id="subscribeToOrderEvents">Subscribe</button>
+
+<h3>Already subscribed to orders</h3>
+<div id="alreadySubscribed"></div>
+
+<h3>There will appear raw text of received notifications</h3>
+<hr/>
+<div id="notifications">
+
+</div>
+<hr/>
+
+<script src="/js/signalr/dist/browser/signalr.js"></script>
+<script src="/ClientSample/index.js"></script>
+</body>
+</html>
+
