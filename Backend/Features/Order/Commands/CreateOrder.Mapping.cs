@@ -6,7 +6,7 @@ internal class DishInOrderDtoMapper : IRegister
 {
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<Domain.DishInBasket, Domain.DishInOrderDto>()
+        config.NewConfig<Domain.DishInBasket, Domain.Services.DishInOrderDto>()
             .ShallowCopyForSameType(true)
             .GenerateMapper(MapType.Map | MapType.Projection | MapType.MapToTarget);
     }

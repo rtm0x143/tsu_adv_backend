@@ -1,5 +1,6 @@
 ﻿using Backend.Common.Dtos;
 using Common.App.Attributes;
+using Common.App.Dtos;
 using Common.App.RequestHandlers;
 
 namespace Backend.Features.Restaurant.Queries;

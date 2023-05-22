@@ -35,13 +35,19 @@ public static class ServiceCollectionExtensions
     /// Adds Jwt authentication, expects <see cref="ITokenValidationParametersProvider"/> service implemented
     /// </summary>
     /// <returns><see cref="AuthenticationBuilder"/> so you can chain and modify authentication</returns>
-    public static AuthenticationBuilder AddCommonJwtBearerAuth(this IServiceCollection services)
+    public static AuthenticationBuilder AddCommonJwtBearerAuth(this IServiceCollection services,
+        Action<JwtBearerOptions>? configureOptions = null)
     {
         services.AddTransient<IConfigureNamedOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
         services.AddTransient<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
 
-        return services
-            .AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
-            .AddJwtBearer();
+        var authenticationBuilder = services.AddAuthentication(options =>
+        {
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        });
+
+        return configureOptions == null
+            ? authenticationBuilder.AddJwtBearer()
+            : authenticationBuilder.AddJwtBearer(configureOptions);
     }
 }

@@ -12,11 +12,14 @@ public static class ServiceCollectionExtensions
     /// and also configures <see cref="IOptions{TOptions}"/> for <see cref="JwtValidationOptions"/>
     /// </summary>
     /// <returns>given <paramref name="services"/> parameter</returns>
-    public static IServiceCollection AddCommonJwtServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCommonJwtServices(this IServiceCollection services,
+        IConfiguration configuration)
     {
-        services.AddSingleton<IConfigureOptions<JwtValidationOptions>, ConfigureJwtValidationOptions>();
-        services.AddSingleton<IValidateOptions<JwtValidationOptions>, ValidateJwtValidationOptions>();
-        
+        services.Configure<JwtValidationOptions>(
+                configuration.GetSection(JwtValidationOptions.ConfigurationSectionName))
+            .AddSingleton<IConfigureOptions<JwtValidationOptions>, ConfigureJwtValidationOptions>()
+            .AddSingleton<IValidateOptions<JwtValidationOptions>, ValidateJwtValidationOptions>();
+
         services.AddSingleton<ITokenValidationParametersProvider, TokenValidatorService>();
         services.AddSingleton<ITokenValidator, TokenValidatorService>();
         return services;

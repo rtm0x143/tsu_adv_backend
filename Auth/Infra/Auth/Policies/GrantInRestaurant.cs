@@ -1,4 +1,4 @@
-﻿using Common.App.Utils;
+﻿using Common.Domain.Utils;
 using Common.Infra.Auth;
 using Microsoft.AspNetCore.Authorization;
 

@@ -1,7 +1,9 @@
 ﻿"use strict";
 
 var connection = new signalR.HubConnectionBuilder()
-    .withUrl("/api/hubs/notifications")
+    .withUrl("/api/hubs/notifications", {
+        accessTokenFactory: () => document.getElementById("accessTokenArea").value
+    })
     .configureLogging(signalR.LogLevel.Debug)
     .build();
 

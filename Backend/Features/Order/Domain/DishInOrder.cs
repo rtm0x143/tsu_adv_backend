@@ -19,7 +19,7 @@ public class DishInOrder
         }
     }
 
-    public uint Count { get; private set; }
+    public ulong Count { get; private set; }
 
     private DishInOrder()
     {
@@ -29,7 +29,7 @@ public class DishInOrder
     /// Constructs existing <see cref="DishInOrder"/> model
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">When <paramref name="count"/> of dish in order less than 1</exception>
-    public static OneOf<DishInOrder, ArgumentOutOfRangeException> Construct(ulong orderNumber, Dish dish, uint count)
+    public static OneOf<DishInOrder, ArgumentOutOfRangeException> Construct(ulong orderNumber, Dish dish, ulong count)
     {
         if (count < 1) return new ArgumentOutOfRangeException($"{nameof(count)} can't less than one");
         return new DishInOrder

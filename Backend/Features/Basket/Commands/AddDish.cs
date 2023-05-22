@@ -22,7 +22,7 @@ namespace Backend.Controllers
         /// <response code="403">When user isn't customer</response>
         [Authorize(Roles = nameof(CommonRoles.Customer))]
         [HttpPost("{dishId}")]
-        public Task<ActionResult> AddDish([FromServices] IAddDish addDish, Guid dishId, [FromQuery] uint count = 1)
+        public Task<ActionResult> AddDish([FromServices] IAddDish addDish, Guid dishId, [FromQuery] ulong count = 1)
         {
             if (!Guid.TryParse(GetUserId(), out var userId)) return Task.FromResult(InvalidTokenPayload());
 

@@ -1,0 +1,19 @@
+﻿@using System.Security.Claims
+@model ProfileViewModel
+
+<div class="d-flex justify-content-between">
+    <h2>Your Profile</h2>
+
+    <a asp-controller="Auth" asp-action="Index">
+        <button>
+            Sign in another user
+        </button>
+    </a>
+</div>
+
+@Html.DisplayForModel("PropertyList")
+
+<div class="RolesBlock">
+    <strong>You have roles :</strong>
+    @string.Join(", ", User.FindAll(ClaimTypes.Role).Select(claim => claim.Value))
+</div>

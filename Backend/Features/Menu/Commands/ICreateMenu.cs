@@ -9,7 +9,7 @@ namespace Backend.Features.Menu.Commands;
 public record MenuCreationDto(string Name);
 
 /// <exception cref="KeyNotFoundException"><paramref name="RestaurantId"/> not found</exception>
-/// <exception cref="CollisionException"></exception>
+/// <exception cref="ConflictException"></exception>
 public sealed record CreateMenuCommand(Guid RestaurantId, MenuCreationDto Menu) : IRequestWithException<EmptyResult>;
 
 [RequestHandlerInterface]

@@ -1,6 +1,7 @@
 ﻿using Backend.Features.Dish.Domain.Services;
 using Common.App.Utils;
 using Common.Domain;
+using Common.Domain.Utils;
 using Common.Infra.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;

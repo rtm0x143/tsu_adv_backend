@@ -1,23 +1,46 @@
 using AdminPanel.Infra.Http;
+using AdminPanel.Infra.Http.Configuration;
+using AdminPanel.Infra.Jwt;
+using AdminPanel.PresentationServices;
 using AdminPanel.Services;
+using Common.Infra.Auth.Configure;
 using Common.Infra.HttpClients;
+using Common.Infra.Services.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-
 var mvcBuilder = builder.Services.AddRazorPages();
-if (builder.Environment.IsDevelopment()) 
+
+if (builder.Environment.IsDevelopment())
     mvcBuilder.AddRazorRuntimeCompilation();
 
-builder.Services.AddCommonHttpClientConfiguration(builder.Configuration)
-    .AddScoped<IAuthService, AuthHttpClient>();
+builder.Services.AddPresentationServices();
+
+builder.Services.Configure<CookieParametersOptions>(options =>
+{
+    options.AccessTokenParameterName = "access_token";
+    options.RefreshTokenParameterName = "refresh_token";
+});
+
+builder.Services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtFromCookie>();
+builder.Services.AddCommonJwtServices(builder.Configuration)
+    .AddCommonJwtBearerAuth();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddCommonHttpClientConfiguration(builder.Configuration,
+        AuthHttpClient.Configuration)
+    .AddScoped<IAuthService, AuthHttpClient>()
+    .AddScoped<IProfileRepository, AuthHttpClient>()
+    .AddScoped<IRestaurantRepository, BackendHttpClient>();
 
 var app = builder.Build();
 
+app.UseExceptionHandler("/Home/Error");
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
 
@@ -26,6 +49,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -25,7 +25,7 @@ namespace Backend.Controllers
         [Authorize(Roles = nameof(CommonRoles.Customer))]
         [HttpDelete("{dishId}")]
         public Task<ActionResult> RemoveDish([FromServices] IRemoveDish removeDish, Guid dishId,
-            [FromQuery] bool truncate = false, [FromQuery] uint count = 1)
+            [FromQuery] bool truncate = false, [FromQuery] ulong count = 1)
         {
             if (!Guid.TryParse(GetUserId(), out var userId)) return Task.FromResult(InvalidTokenPayload());
             return removeDish.Execute(truncate 

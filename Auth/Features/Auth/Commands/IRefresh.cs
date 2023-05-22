@@ -1,18 +1,16 @@
 ﻿using Auth.Features.Auth.Common;
 using Common.App.Attributes;
-using Common.App.Exceptions;
 using Common.App.RequestHandlers;
 using Common.Domain.Exceptions;
-using OneOf;
 
 namespace Auth.Features.Auth.Commands;
 
-public record RefreshCommand(string RefreshToken) : 
-    IRequest<OneOf<TokensResult, ActionFailedException, ArgumentException, KeyNotFoundException>>;
+/// <exception cref="ActionFailedException">When refresh failed</exception>
+/// <exception cref="KeyNotFoundException"></exception>
+/// <exception cref="ArgumentException"></exception>
+public sealed record RefreshCommand(string RefreshToken) : IRequestWithException<TokensResult, Exception>;
 
 [RequestHandlerInterface]
-public interface IRefresh : IRequestHandler<
-    RefreshCommand,
-    OneOf<TokensResult, ActionFailedException, ArgumentException, KeyNotFoundException>>
+public interface IRefresh : IRequestHandlerWithException<RefreshCommand, TokensResult>
 {
 }

@@ -19,4 +19,10 @@ public static class QueryableExtensions
         SortType.Dec => queryable.OrderByDescending(keySelector),
         _ => queryable
     };
+
+    public static IQueryable<T> Option<T>(this IQueryable<T> queryable, bool condition,
+        Func<IQueryable<T>, IQueryable<T>> option)
+    {
+        return condition ? option(queryable) : queryable;
+    }
 }

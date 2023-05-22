@@ -1,0 +1,60 @@
+﻿@using System.Reflection
+@using AdminPanel.Views.Shared.DisplayTemplates
+@model IEnumerable<object>
+
+@{
+    var propertyInfos = Model.FirstOrDefault()
+        ?.GetType()
+        .GetProperties()
+        .Where(prop => prop.GetMethod?.IsPublic == true)
+        .ToArray() ?? Array.Empty<PropertyInfo>();
+
+    var propertyTableViewData = new PropertyTableViewData(viewData: ViewData);
+    var idProp = propertyInfos.FirstOrDefault(prop => prop.Name == propertyTableViewData.IdPropertyName);
+}
+
+<table>
+    <tr>
+        @{
+            if (propertyInfos.Length == 0)
+            {
+                <i>
+                    <h3>No properties to display</h3>
+                </i>
+            }
+            else
+            {
+                <td class="bg-dark bd-light border"></td>
+                foreach (var propertyInfo in propertyInfos)
+                {
+                    <td class="bg-dark text-white bd-light border px-1">
+                        @propertyInfo.Name
+                    </td>
+                }
+            }
+        }
+    </tr>
+    @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
+    {
+        <tr>
+            <td class="bg-dark text-white px-2 bd-light border">
+                @if (idProp != null && idProp.GetMethod!.Invoke(item, null)?.ToString() is string id)
+                {
+                    <a asp-controller=@propertyTableViewData.GoToItemController asp-action=@propertyTableViewData.GoToItemAction asp-route-id=@id>
+                        <strong>@index.ToString()</strong>
+                    </a>
+                }
+                else
+                {
+                    @index.ToString()
+                }
+            </td>
+            @foreach (var propertyInfo in propertyInfos)
+            {
+                <td class="bd-light border-end border-1 px-1 " style="max-width: 20em; overflow: auto">
+                    <div style="max-height: 6em; white-space: pre;">@propertyInfo.GetMethod!.Invoke(item, null)?.ToString()</div>
+                </td>
+            }
+        </tr>
+    }
+</table>

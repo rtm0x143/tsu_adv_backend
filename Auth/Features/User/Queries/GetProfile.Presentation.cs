@@ -15,8 +15,7 @@ public partial class UserController
     public Task<ActionResult<UserProfileDto>> GetSelfProfile([FromServices] IGetProfile getProfile)
     {
         if (!Guid.TryParse(GetUserId(), out var id))
-            return Task.FromResult<ActionResult<UserProfileDto>>(
-                BadRequest("Invalid user identifier in token"));
+            return Task.FromResult<ActionResult<UserProfileDto>>(InvalidTokenPayload());
 
         return getProfile.Execute(new(id))
             .ContinueWith<ActionResult<UserProfileDto>>(t => t.Result.IsT0

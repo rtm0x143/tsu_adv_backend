@@ -1,0 +1,15 @@
+﻿@using AdminPanel.Views.Shared.DisplayTemplates
+@model EntityCatalogViewModel
+
+@{
+    ViewBag.Title = Model.EntityType.Name + " Catalog";
+    Layout = "_Layout";
+
+}
+@using (Html.BeginForm(FormMethod.Get))
+{
+    @Html.EditorFor(model => model.Query, Model.QueryType.Name)
+}
+<hr/>
+@Html.DisplayFor(model => model.Entities, "PropertyTable",
+    new PropertyTableViewData(nameof(Restaurant.Id), "Restaurant", "Details"))

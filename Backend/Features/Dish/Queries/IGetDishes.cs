@@ -2,6 +2,7 @@
 using Backend.Common.Dtos;
 using Backend.Features.Dish.Domain.ValueTypes;
 using Common.App.Attributes;
+using Common.App.Dtos;
 using Common.App.Exceptions;
 using Common.App.RequestHandlers;
 using Common.Infra.Dal;

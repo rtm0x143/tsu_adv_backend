@@ -10,9 +10,21 @@ namespace Notifications.Converters
     {
         public static ExtensibleNotification AdaptToExtensible(this Notification p1)
         {
-            return p1 == null ? null : new ExtensibleNotification(p1.NotifyTime, p1.Topic.ToString(), p1.Title, funcMain1(p1.Payload));
+            return p1 == null ? null : new ExtensibleNotification()
+            {
+                NotifyTime = p1.NotifyTime,
+                Topic = p1.Topic.ToString(),
+                Title = p1.Title,
+                Extensions = funcMain1(p1.Payload)
+            };
         }
-        public static Expression<Func<Notification, ExtensibleNotification>> ProjectToExtensible => p3 => new ExtensibleNotification(p3.NotifyTime, p3.Topic.ToString(), p3.Title, p3.Payload);
+        public static Expression<Func<Notification, ExtensibleNotification>> ProjectToExtensible => p3 => new ExtensibleNotification()
+        {
+            NotifyTime = p3.NotifyTime,
+            Topic = p3.Topic.ToString(),
+            Title = p3.Title,
+            Extensions = p3.Payload
+        };
         
         private static Dictionary<string, object> funcMain1(Dictionary<string, object> p2)
         {

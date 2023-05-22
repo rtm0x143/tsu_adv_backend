@@ -1,21 +1,19 @@
 ﻿using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Common.Infra.HttpClients;
 
-public class CommonNamedHttpClientConfiguration : INamedHttpClientConfiguration
+public class CommonNamedHttpClientConfiguration : NamedHttpClientConfigurationBase
 {
-    public string Name { get; }
     public string ApiKeyHeaderName { get; init; } = "X-API-KEY";
 
-    public Action<IServiceProvider, HttpClient> ConfigureClientMethod => ConfigureClient;
-
-    protected virtual void ConfigureClient(IServiceProvider provider, HttpClient client)
+    protected override void ConfigureClient(IServiceProvider provider, HttpClient client)
     {
-        var optionsFactory = provider.GetRequiredService<IOptionsFactory<ExternalApiOptions>>();
-        var options = optionsFactory.Create(Name);
+        var optionsMonitor = provider.GetRequiredService<IOptionsMonitor<ExternalApiOptions>>();
+        var options = optionsMonitor.Get(Name);
         client.BaseAddress = options.Url;
         if (options.ApiBearer != null)
             client.DefaultRequestHeaders.Authorization =
@@ -23,5 +21,7 @@ public class CommonNamedHttpClientConfiguration : INamedHttpClientConfiguration
         if (options.ApiKey != null) client.DefaultRequestHeaders.Add(ApiKeyHeaderName, options.ApiKey);
     }
 
-    public CommonNamedHttpClientConfiguration(string name) => Name = name;
+    public CommonNamedHttpClientConfiguration(string name) : base(name)
+    {
+    }
 }

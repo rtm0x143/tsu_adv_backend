@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 
 namespace Common.Infra.Services.Jwt;
 
-internal class ConfigureJwtValidationOptions : IConfigureOptions<JwtValidationOptions>
+public class ConfigureJwtValidationOptions : IConfigureOptions<JwtValidationOptions>
 {
     internal const string SigningKeyEnvName = "JWT_SIGNING_KEY";
 
@@ -12,8 +12,7 @@ internal class ConfigureJwtValidationOptions : IConfigureOptions<JwtValidationOp
 
     public void Configure(JwtValidationOptions options)
     {
-        Configuration.GetSection(JwtValidationOptions.ConfigurationSectionName).Bind(options);
-        options.SigningKey = Configuration["JWT_SIGNING_KEY"] ?? options.SigningKey;
+        options.SigningKey = Configuration[SigningKeyEnvName] ?? options.SigningKey;
         if (Configuration[nameof(JwtValidationOptions.ApplicationId)] is string id) options.ApplicationId = id;
     }
 }

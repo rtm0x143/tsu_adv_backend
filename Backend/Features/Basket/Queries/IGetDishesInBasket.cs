@@ -7,7 +7,7 @@ namespace Backend.Features.Basket.Queries;
 
 public record DishInBasketDto(
         Guid Id, string Name, string? Photo, decimal Price, DishCategory Category, bool IsVegetarian,
-        uint Count)
+        ulong Count)
     : DishShortDto(Id, Name, Photo, Price, Category, IsVegetarian);
 
 public sealed record GetDishesInBasketQuery(Guid UserId) : IRequest<DishInBasketDto[]>;

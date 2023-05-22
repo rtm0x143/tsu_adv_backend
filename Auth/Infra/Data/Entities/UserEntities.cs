@@ -6,7 +6,7 @@ namespace Auth.Infra.Data.Entities;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum Gender
 {
-    Unspesified,
+    Unspecified,
     Male,
     Female
 }

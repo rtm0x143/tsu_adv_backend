@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
+using Common.Domain.Exceptions;
 
-namespace Common.App.Utils;
+namespace Common.Domain.Utils;
 
 public static class PrincipalExtensions
 {
@@ -20,4 +21,8 @@ public static class PrincipalExtensions
     /// <returns><see cref="Guid"/> when <paramref name="claimType"/> found <c>null</c> otherwise</returns>
     public static Guid? FindFirstAsGuid(this ClaimsPrincipal principal, string claimType)
         => principal.FindFirst(claimType)?.Value is string value ? Guid.Parse(value) : null;
+
+    public static Guid GetRequiredUserId(this ClaimsPrincipal principal)
+        => principal.FindFirstAsGuid(ClaimTypes.NameIdentifier)
+           ?? throw new InvalidUserPrincipalException();
 }

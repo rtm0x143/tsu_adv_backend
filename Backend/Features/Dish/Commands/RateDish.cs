@@ -12,6 +12,8 @@ using EmptyResult = Common.Domain.ValueTypes.EmptyResult;
 
 namespace Backend.Controllers
 {
+    
+    
     public partial class DishController
     {
         /// <summary>Set user's rate on specified dish</summary>

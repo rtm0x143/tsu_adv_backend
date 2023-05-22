@@ -11,4 +11,5 @@ public record struct OrderNumber(ulong Numeric, string? String = null)
     public string String = String ?? OrderNumberFormatter.Encode(Numeric);
 
     public static implicit operator OrderNumber(ulong number) => new(number);
+    public static implicit operator ulong(OrderNumber orderNumber) => orderNumber.Numeric;
 }

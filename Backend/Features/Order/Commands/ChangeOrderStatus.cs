@@ -26,13 +26,13 @@ namespace Backend.Controllers
             [FromRoute] OrderStatus status,
             [FromServices] IChangeOrderStatus changeOrderStatus)
         {
-            var authorizationResult = await AuthService.AuthorizeAsync(User, status, ChangeOrderStatusPolicy.Instance);
-            if (!authorizationResult.Succeeded) return Forbid();
+            if (await AuthService.AuthorizeAsync(User, ChangeOrderStatusPolicy.Create(status, number))
+                is { Succeeded: false })
+                return Forbid();
 
             if (!Guid.TryParse(GetUserId(), out var userId)) return InvalidTokenPayload();
 
-            var result = await changeOrderStatus.Execute(new(number.Numeric, userId, status));
-            return result.Succeeded() ? Ok() : ExceptionsDescriber.Describe(result.Error());
+            return await ExecuteRequest(changeOrderStatus, new(number.Numeric, userId, status));
         }
     }
 }

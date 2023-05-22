@@ -8,5 +8,5 @@ public class DishInOrder
     public Dish Dish { get; set; } = default!;
     public Guid DishId { get; set; }
     
-    public uint Count { get; set; }
+    public ulong Count { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using OneOf;
 
 namespace Common.App.Utils;
@@ -23,7 +24,7 @@ public static class OneOfExtensions
     public static TValue Value<TValue, TException>(this OneOf<TValue, TException> oneOf)
         where TException : Exception
         => oneOf.AsT0;
-    
+
     /// <summary>
     /// Semantically better way to call <see cref="OneOf{T0,T1}.AsT1"/> where T0 represents valid result and T1 exception
     /// </summary>
@@ -33,4 +34,15 @@ public static class OneOfExtensions
     public static TException Error<TValue, TException>(this OneOf<TValue, TException> oneOf)
         where TException : Exception
         => oneOf.AsT1;
+
+    /// <summary>
+    /// Semantically better way to call <see cref="OneOf{T0,T1}.TryPickT0"/> where T0 represents valid result and T1 exception
+    /// </summary>
+    /// <returns><c>true</c> if <see cref="Succeeded{TValue,TException}"/> otherwise <c>false</c></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool TryGetValue<TValue, TException>(this OneOf<TValue, TException> oneOf,
+        [NotNullWhen(true)] out TValue? value,
+        [NotNullWhen(false)] out TException? exception)
+        where TException : Exception
+        => oneOf.TryPickT0(out value, out exception);
 }

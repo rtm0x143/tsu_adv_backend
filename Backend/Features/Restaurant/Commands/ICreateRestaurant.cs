@@ -8,9 +8,9 @@ using Common.Domain.ValueTypes;
 namespace Backend.Features.Restaurant.Commands;
 
 public sealed record CreateRestaurantCommand(RestaurantCreationDto Restaurant) 
-    : IRequestWithException<IdResult, CollisionException>;
+    : IRequestWithException<IdResult, ConflictException>;
 
 [RequestHandlerInterface]
-public interface ICreateRestaurant : IRequestHandlerWithException<CreateRestaurantCommand, IdResult, CollisionException>
+public interface ICreateRestaurant : IRequestHandlerWithException<CreateRestaurantCommand, IdResult, ConflictException>
 {
 }

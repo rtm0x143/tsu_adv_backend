@@ -6,6 +6,7 @@ using Common.App.Utils;
 using Common.Domain.Exceptions;
 using Common.Domain.ValueTypes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NServiceBus;
 using OneOf;
 
@@ -45,13 +46,13 @@ namespace Backend.Features.Restaurant.Commands
             _messageSession = messageSession;
         }
 
-        public async Task<OneOf<IdResult, CollisionException>> Execute(CreateRestaurantCommand command)
+        public async Task<OneOf<IdResult, ConflictException>> Execute(CreateRestaurantCommand command)
         {
-            // if (await _context.Restaurants.FirstOrDefaultAsync(r => r.Name == command.Restaurant.Name) != null)
-            //     return new CollisionException($"Restaurant with name '{command.Restaurant.Name}' already exist");
+            if (await _context.Restaurants.FirstOrDefaultAsync(r => r.Name == command.Restaurant.Name) != null)
+                return new ConflictException($"Restaurant with name '{command.Restaurant.Name}' already exist");
 
             var entry = _context.Restaurants.Add(new() { Name = command.Restaurant.Name });
-            // await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             await _messageSession.Publish(new RestaurantCreatedEvent(entry.Entity.Id, entry.Entity.Name));
 

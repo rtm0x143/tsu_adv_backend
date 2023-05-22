@@ -51,7 +51,7 @@ namespace Backend.Features.Menu.Commands
             };
 
             if (await _context.Menus.ContainsAsync(menu))
-                return new CollisionException("Such menu in restaurant already exist");
+                return new ConflictException("Such menu in restaurant already exist");
 
             _context.Menus.Add(menu);
             await _context.SaveChangesAsync();

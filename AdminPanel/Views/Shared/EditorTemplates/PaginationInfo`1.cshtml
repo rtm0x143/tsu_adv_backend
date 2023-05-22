@@ -1,0 +1,30 @@
+﻿@using Common.App.Dtos;
+@model PaginationInfo<Guid>?
+
+<div class="d-flex flex-row justify-content-between">
+    <div>
+        <label>
+            @nameof(Model.PageSize)
+            @Html.EditorFor(model => model!.PageSize)
+            <div class="text-danger">
+                @string.Join(";\n", ViewData.ModelState
+                    .FirstOrDefault(
+                        pair => pair.Key.Contains(nameof(PaginationInfo<Guid>.PageSize)))
+                    .Value?.Errors
+                    .Select(e => e.ErrorMessage) ?? Array.Empty<string>())
+            </div>
+        </label>
+        <input hidden="hidden" value="@Model?.AfterRecord" asp-for="AfterRecord"/>
+    </div>
+    <div class="ms-2">
+        <div >
+            @if (Model != null && Model.AfterRecord != default)
+            {
+                <button type="submit">Next page</button>
+            }
+        </div>
+        <div >
+            <button class="w-100" type="submit">First page</button>
+        </div>
+    </div>
+</div>

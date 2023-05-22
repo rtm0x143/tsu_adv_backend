@@ -1,0 +1,23 @@
+﻿@model object
+
+<ul class="PropertyList">
+@foreach (var propertyInfo in Model.GetType().GetProperties()
+    .Where(prop => prop.GetMethod?.IsPublic == true))
+{
+    <li class="PropertyListItem">
+        <strong>@propertyInfo.Name</strong>
+        <span>:</span>
+        @{
+            if (propertyInfo.GetMethod!.Invoke(Model, null) is string value)
+            {
+                <span>@value</span>
+            }
+            else
+            {
+                <i>_____</i>
+            }
+
+        }
+    </li>
+}
+</ul>

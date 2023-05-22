@@ -54,7 +54,7 @@ namespace Backend.Features.Menu.Commands
             if (await _context.Dishes.FindAsync(command.DishId) is not Infra.Data.Entities.Dish dish)
                 return new KeyNotFoundException(nameof(command.DishId));
 
-            if (menu.Dishes!.Contains(dish)) return new CollisionException("Menu Already contains such dish");
+            if (menu.Dishes!.Contains(dish)) return new ConflictException("Menu Already contains such dish");
 
             menu.Dishes!.Add(dish);
             await _context.SaveChangesAsync();

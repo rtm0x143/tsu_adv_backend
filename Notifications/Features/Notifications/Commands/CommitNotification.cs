@@ -24,7 +24,7 @@ public class CommitNotification : ICommitNotification
     {
         if (command.Notification.Id != default
             && await _context.Notifications.FindAsync(command.Notification.Id) != null)
-            return new CollisionException("Already exists");
+            return new ConflictException("Already exists");
 
         _context.Notifications.Add(command.Notification);
         await _context.SaveChangesAsync();

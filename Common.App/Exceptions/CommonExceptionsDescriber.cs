@@ -10,14 +10,9 @@ namespace Common.App.Exceptions;
 
 public class CommonExceptionsDescriber : IExceptionsDescriber
 {
-    protected readonly IWebHostEnvironment _env;
-    protected readonly ILogger<CommonExceptionsDescriber> _logger;
+    protected readonly ILogger<CommonExceptionsDescriber> Logger;
 
-    public CommonExceptionsDescriber(IWebHostEnvironment env, ILogger<CommonExceptionsDescriber> logger)
-    {
-        _env = env;
-        _logger = logger;
-    }
+    public CommonExceptionsDescriber(ILogger<CommonExceptionsDescriber> logger) => Logger = logger;
 
     public virtual ActionResult Describe(object exception)
     {
@@ -42,10 +37,8 @@ public class CommonExceptionsDescriber : IExceptionsDescriber
                 return new BadRequestObjectResult(arg.Message);
             default:
                 if (exception is Exception ex)
-                {
-                    _logger.LogWarning(ex, "Exception couldn't be described");
-                    if (_env.IsDevelopment()) throw new Exception("Exception couldn't be described", ex);
-                }
+                    Logger.LogWarning(ex, $"Exception couldn't be described by {typeof(CommonExceptionsDescriber)}");
+
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }

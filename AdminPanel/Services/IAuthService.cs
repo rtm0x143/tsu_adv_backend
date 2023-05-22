@@ -1,8 +1,11 @@
-﻿namespace AdminPanel.Services;
+﻿using OneOf;
+
+namespace AdminPanel.Services;
 
 public record LoginResult(string AccessToken, string RefreshToken);
 
 public interface IAuthService
 {
-    Task<LoginResult> Login(string email, string password);
+    Task<OneOf<LoginResult, Exception>> Login(string email, string password);
+    Task<OneOf<LoginResult, Exception>> Refresh(string refreshToken);
 }

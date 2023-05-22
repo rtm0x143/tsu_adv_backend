@@ -17,12 +17,14 @@ public static class ConfigureInfraServicesExtension
     public static IServiceCollection AddInfraServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddCommonJwtServices(configuration);
-        
-        services.AddSingleton<IConfigureOptions<JwtConfigurationOptions>, ConfigureJwtConfigurationOptions>();
+
+        services.Configure<JwtConfigurationOptions>(
+                configuration.GetSection(JwtValidationOptions.ConfigurationSectionName))
+            .AddSingleton<IConfigureOptions<JwtConfigurationOptions>, ConfigureJwtValidationOptions>();
         services.AddSingleton<IValidateOptions<JwtConfigurationOptions>, ValidateJwtConfigurationOptions>();
-        
+
         services.AddSingleton<IJwtGenerator, JwtGenerator>();
-        
+
         services.Configure<RefreshTokenConfigurationProperties>(
             configuration.GetSection(RefreshTokenConfigurationProperties.ConfigurationSection));
 

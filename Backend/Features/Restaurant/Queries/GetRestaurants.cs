@@ -3,6 +3,7 @@ using Backend.Converters;
 using Backend.Features.Restaurant.Common;
 using Backend.Features.Restaurant.Queries;
 using Backend.Infra.Data;
+using Common.Infra.Dal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,10 +33,13 @@ namespace Backend.Features.Restaurant.Queries
 
         public Task<RestaurantDto[]> Execute(GetRestaurantsQuery query)
         {
-            return _context.Restaurants
-                .Where(restaurant => restaurant.Id > query.Pagination.AfterRecord)
-                .Take((int)query.Pagination.PageSize)
+            return _context.Restaurants.Option(
+                    condition: query.Pagination.AfterRecord != default,
+                    option: queryable => queryable.Where(restaurant => restaurant.Id > query.Pagination.AfterRecord))
+                .OrderBy(restaurant => restaurant.Id)
+                .Take(query.Pagination.PageSize)
                 .Select(RestaurantMapper.ProjectToDto)
+                .AsNoTracking()
                 .ToArrayAsync();
         }
     }

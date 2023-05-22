@@ -1,27 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using AdminPanel.Models;
+﻿using AdminPanel.Models;
+using AdminPanel.Services;
+using Common.App.Utils;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Diagnostics;
 
-namespace AdminPanel.Controllers
+namespace AdminPanel.Controllers;
+
+public class HomeController : AdminPanelController
 {
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        private readonly ILogger<HomeController> _logger;
+        return View();
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+    // [Authorize]
+    public async Task<IActionResult> Profile([FromServices] IProfileRepository profileRepository)
+    {
+        var selfProfileResult = await profileRepository.GetSelfProfile();
+        return selfProfileResult.Succeeded()
+            ? View(selfProfileResult.Value())
+            : await ErrorView(selfProfileResult.Error());
+    }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    public Task<IActionResult> Error()
+    {
+        var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+        return ErrorView(exceptionHandlerPathFeature?.Error);
     }
 }

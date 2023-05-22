@@ -1,13 +1,16 @@
-﻿using AdminPanel.Services;
+﻿using AdminPanel.Infra.Http.Configuration;
+using AdminPanel.Models;
+using AdminPanel.Services;
 using Common.Infra.HttpClients;
+using OneOf;
 
 namespace AdminPanel.Infra.Http;
 
-public class AuthHttpClient : IAuthService
+public class AuthHttpClient : IAuthService, IProfileRepository
 {
     public const string Name = "Auth";
 
-    public static INamedHttpClientConfiguration Configuration { get; } = new CommonNamedHttpClientConfiguration(Name);
+    public static INamedHttpClientConfiguration Configuration { get; } = new CookieAccessTokenConfiguration(Name);
 
     private readonly HttpClient _httpClient;
 
@@ -15,10 +18,26 @@ public class AuthHttpClient : IAuthService
 
     private record LoginDto(string Email, string Password);
 
-    public async Task<LoginResult> Login(string email, string password)
+    public Task<OneOf<LoginResult, Exception>> Login(string email, string password)
     {
-        var response = await _httpClient.PostAsJsonAsync("login", new LoginDto(email, password));
-        return await response.Content.ReadFromJsonAsync<LoginResult>()
-               ?? throw new HttpRequestException("Invalid response content returned");
+        return _httpClient.SendAsJsonCheckedAsync<LoginResult, LoginDto>(
+            method: HttpMethod.Post,
+            requestUri: "auth/login",
+            payload: new LoginDto(email, password));
+    }
+
+    private record RefreshDto(string RefreshToken);
+
+    public Task<OneOf<LoginResult, Exception>> Refresh(string refreshToken)
+    {
+        return _httpClient.SendAsJsonCheckedAsync<LoginResult, RefreshDto>(
+            method: HttpMethod.Post,
+            requestUri: "auth/refresh",
+            payload: new RefreshDto(refreshToken));
+    }
+
+    public Task<OneOf<ProfileViewModel, Exception>> GetSelfProfile()
+    {
+        return _httpClient.SendAsJsonCheckedAsync<ProfileViewModel>(HttpMethod.Get, "user/profile");
     }
 }

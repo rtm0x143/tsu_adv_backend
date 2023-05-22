@@ -1,13 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Backend.Features.Order.Domain.Exceptions;
 using Backend.Features.Order.Domain.ValueTypes;
-using Common.App.Exceptions;
 using Common.Domain.Exceptions;
 using OneOf;
 
 namespace Backend.Features.Order.Domain;
-
-public record struct DishInOrderDto(Dish Dish, uint Count);
 
 public partial class Order
 {
@@ -58,7 +55,7 @@ public partial class Order
     }
 
     /// <exception cref="ArgumentException">When <paramref name="logs"/> is empty</exception>
-    /// <exception cref="UnsuitableDataException">When some logs not related to this order</exception>
+    /// <exception cref="ConflictException">When some logs not related to this order</exception>
     private static bool _validateStatusLogs(IEnumerable<OrderStatusLog> logs, ulong orderNumber,
         [NotNullWhen(false)] out Exception? exception)
     {
@@ -72,7 +69,7 @@ public partial class Order
         do
         {
             if (enumerator.Current.OrderNumber == orderNumber) continue;
-            exception = new UnsuitableDataException($"Some '{nameof(logs)}' items aren't related to this order");
+            exception = new ConflictException($"Some '{nameof(logs)}' items aren't related to this order");
             return false;
         } while (enumerator.MoveNext());
 

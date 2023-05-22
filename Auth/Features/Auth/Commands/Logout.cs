@@ -18,13 +18,10 @@ namespace Auth.Controllers
         [HttpDelete("logout")]
         public Task<ActionResult> Logout([FromBody] string refreshToken, [FromServices] ILogout logout)
         {
-            if (!User.TryFindFirstGuid(ClaimTypes.NameIdentifier, out var id)) 
-                return Task.FromResult<ActionResult>(BadRequest()) ;
-            
-            return logout.Execute(new(id, refreshToken))
-                .ContinueWith(t => t.Result.IsT0
-                    ? Ok()
-                    : ExceptionsDescriber.Describe(t.Result.Value));
+            if (!Guid.TryParse(GetUserId(), out var userId))
+                return Task.FromResult(InvalidTokenPayload());
+
+            return ExecuteRequest(logout, new(userId, refreshToken));
         }
     }
 }
@@ -41,10 +38,10 @@ namespace Auth.Features.Auth.Commands
             var result = await _refreshTokenHandler.Read(request.RefreshToken);
             if (!result.IsT0) return (Exception)result.Value;
             var token = result.AsT0;
-            
+
             if (token.UserId != request.UserId)
                 return new NotPermittedException("Given refresh token doesn't related to specified user");
-            
+
             await _refreshTokenHandler.Revoke(token);
             return new EmptyResult();
         }

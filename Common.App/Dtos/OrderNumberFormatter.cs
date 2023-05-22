@@ -1,4 +1,6 @@
-﻿using OneOf;
+﻿using System.Buffers;
+using System.Buffers.Binary;
+using OneOf;
 using SimpleBase;
 
 namespace Common.App.Dtos;
@@ -14,29 +16,16 @@ public static class OrderNumberFormatter
         try
         {
             var base32 = orderNumberString.Replace("-", string.Empty);
-            var decoded = Base32.Crockford.Decode(base32);
+            var safeByteCountForDecoding = Base32.Crockford.GetSafeByteCountForDecoding(base32);
+            var output = new Span<byte>(new byte[safeByteCountForDecoding < sizeof(ulong)
+                ? sizeof(ulong)
+                : safeByteCountForDecoding]);
+            if (!Base32.Crockford.TryDecode(base32, output, out var numBytesWritten)
+                || numBytesWritten > 8)
+                return false;
 
-            byte[] resultBytes;
-            switch (decoded.Length)
-            {
-                case sizeof(ulong):
-                    resultBytes = decoded;
-                    break;
-                case > sizeof(ulong): return false;
-                default:
-                    resultBytes = new byte[sizeof(ulong)];
-                    if (!BitConverter.IsLittleEndian)
-                    {
-                        Array.Copy(decoded, 0, resultBytes, sizeof(ulong) - decoded.Length, decoded.Length);
-                        break;
-                    }
-
-                    decoded = decoded.Reverse().ToArray();
-                    Array.Copy(decoded, resultBytes, decoded.Length);
-                    break;
-            }
-
-            result = BitConverter.ToUInt64(resultBytes);
+            result = BitConverter.ToUInt64(output);
+            result = BitConverter.IsLittleEndian ? result : BinaryPrimitives.ReverseEndianness(result);
             return true;
         }
         catch (Exception)
@@ -47,6 +36,7 @@ public static class OrderNumberFormatter
 
     public static string Encode(ulong value)
     {
+        value = BitConverter.IsLittleEndian ? value : BinaryPrimitives.ReverseEndianness(value);
         var base32 = Base32.Crockford.Encode(BitConverter.GetBytes(value));
 
         var significantCount = Math.Max(SectionSize,

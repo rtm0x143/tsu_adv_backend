@@ -10,6 +10,7 @@ public class OrderDbContext : DbContext, IOrderNumberGenerator
     public DbSet<Domain.Dish> Dishes { get; set; } = null!;
     public DbSet<Domain.Order> Orders { get; set; } = null!;
     public DbSet<Domain.DishInBasket> DishesInBasket { get; set; } = null!;
+    public DbSet<Domain.OrderStatusState> OrderStatusStates { get; set; }= null!;
 
     public async ValueTask<ulong> NextOrderNumber()
     {

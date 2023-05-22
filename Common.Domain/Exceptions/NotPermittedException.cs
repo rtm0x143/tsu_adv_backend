@@ -2,7 +2,7 @@
 
 public class NotPermittedException : Exception
 {
-    public NotPermittedException()
+    public NotPermittedException() : base("Not permitted")
     {
     }
 

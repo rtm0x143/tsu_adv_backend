@@ -3,6 +3,7 @@ using Auth.Features.Auth.Common;
 using Auth.Features.Common;
 using Auth.Infra.Data.Entities;
 using Common.App.Exceptions;
+using Common.App.Utils;
 using Common.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,11 +16,13 @@ namespace Auth.Controllers
         [HttpPost("refresh")]
         public Task<ActionResult<TokensResult>> Refresh(RefreshCommand command, [FromServices] IRefresh refresh)
         {
-            return refresh.Execute(command).ContinueWith(t => t.Result.Match<ActionResult<TokensResult>>(
+            return refresh.Execute(command).ContinueWith(task => task.Result.Match<ActionResult<TokensResult>>(
                 tokens => Ok(tokens),
-                actionFailed => Unauthorized(actionFailed.Message),
-                argument => BadRequest(argument.Message),
-                notFound => NotFound(notFound.Message)));
+                exception => exception switch
+                {
+                    ActionFailedException => Unauthorized(exception.Message),
+                    _ => ExceptionsDescriber.Describe(exception)
+                }));
         }
     }
 }
@@ -41,17 +44,16 @@ namespace Auth.Features.Auth.Commands
             _signInManager = signInManager;
         }
 
-        public async Task<OneOf<TokensResult, ActionFailedException, ArgumentException, KeyNotFoundException>> Execute(
-            RefreshCommand request)
+        public async Task<OneOf<TokensResult, Exception>> Execute(RefreshCommand request)
         {
             var result = await _refreshTokenHandler.Read(request.RefreshToken);
-            if (!result.TryPickT0(out var tokenModel, out var rem)) return rem.IsT1 ? rem.AsT1 : rem.AsT0;
+            if (!result.TryGetValue(out var tokenModel, out var tokenException)) return tokenException;
 
             var refreshResult = await tokenModel.ExecuteRefresh(_refreshTokenHandler);
-            if (!refreshResult.TryPickT0(out var newRefreshToken, out var refreshException)) return refreshException;
+            if (!refreshResult.TryGetValue(out var newRefreshToken, out var refreshException)) return refreshException;
 
             var user = await _signInManager.UserManager.FindByIdAsync(newRefreshToken.UserId.ToString());
-            if (user == null) return new KeyNotFoundException("UserId");
+            if (user == null) return new KeyNotFoundException(nameof(newRefreshToken.UserId));
 
             var principal = await _signInManager.CreateUserPrincipalAsync(user);
 

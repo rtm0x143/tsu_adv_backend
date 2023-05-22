@@ -60,7 +60,7 @@ public class RefreshTokenHandler : IRefreshTokenHandler
 
     public string Write(RefreshToken token) => Base64UrlEncoder.Encode(token.Id.ToString());
 
-    public async ValueTask<OneOf<RefreshToken, ArgumentException, KeyNotFoundException>> Read(string refreshTokenString)
+    public async ValueTask<OneOf<RefreshToken, Exception>> Read(string refreshTokenString)
     {
         Guid tokenId;
         try
@@ -75,9 +75,6 @@ public class RefreshTokenHandler : IRefreshTokenHandler
         var token = await _dbContext.UserRefreshTokens.FindAsync(tokenId);
         if (token == null) return new KeyNotFoundException("TokenId");
 
-        return token.ToRefreshTokenModel()
-            .Match<OneOf<RefreshToken, ArgumentException, KeyNotFoundException>>(
-                tokenModel => tokenModel,
-                ex => ex);
+        return token.ToRefreshTokenModel().MapT1(ex => (Exception)ex);
     }
 }

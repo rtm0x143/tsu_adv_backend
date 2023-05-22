@@ -1,5 +1,7 @@
+using System.Reflection;
 using Common.App.Configure;
 using Common.App.Configure.Swagger;
+using Common.App.RequestHandlers;
 using Common.App.Utils;
 using Common.Infra.Auth.Configure;
 using Common.Infra.Messaging;
@@ -25,34 +27,31 @@ builder.Services.AddDbContext<NotificationsDbContext>(options => options.UseNpgs
     builder.Configuration.GetRequiredString("NOTIFICATIONS_DB_CONN", "ConnectionStrings:Default")));
 
 builder.Services.AddCommonJwtServices(builder.Configuration)
-    .AddCommonJwtBearerAuth();
+    .AddCommonJwtBearerAuth(options =>
+    {
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/api/hubs"))
+                {
+                    context.Token = accessToken;
+                    return Task.CompletedTask;
+                }
+
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 // TODO : refactor
-builder.Services.Configure<JwtBearerOptions>(options =>
-{
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
-        {
-            var accessToken = context.Request.Query["AccessToken"];
-            if (!string.IsNullOrEmpty(accessToken) &&
-                context.HttpContext.Request.Path.StartsWithSegments("/api/hubs"))
-            {
-                context.Token = accessToken;
-            }
-
-            return Task.CompletedTask;
-        }
-    };
-});
-
+// builder.Services.Configure<JwtBearerOptions>();
 builder.Services.AddCommonAuthorization();
-
+builder.Services.AddRequestHandlersFrom(Assembly.GetExecutingAssembly());
 builder.Host.ConfigureMessageBus<NotificationsMessageBusConfiguration>();
-
-
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseCommonSwagger();

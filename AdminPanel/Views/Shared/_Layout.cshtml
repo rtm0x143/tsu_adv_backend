@@ -18,10 +18,28 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="SignIn" asp-action="Index">Sign in</a>
-                    </li>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Restaurant" asp-action="Index">Restaurants</a>
+                        </li>
+                    }
                 </ul>
+                |
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="flex-end nav-item">
+                        <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Home" asp-action="Profile">Profile</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="flex-end nav-item">
+                        <a class="nav-link text-dark text-decoration-underline" asp-area="" asp-controller="Auth" asp-action="Index">Sign in</a>
+                    </div>
+                }
+
             </div>
         </div>
     </nav>

@@ -3,6 +3,8 @@ using OneOf;
 
 namespace Backend.Features.Order.Domain.Services;
 
+public record struct DishInOrderDto(Dish Dish, ulong Count);
+
 public class OrderCreator
 {
     private readonly IOrderNumberGenerator _numberGenerator;

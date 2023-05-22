@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Backend.Messaging;
 using Backend.Messaging.Messages.Events;
+using Common.App.RequestHandlers;
 using Common.App.Utils;
 using Common.Infra.Messaging;
 using NServiceBus;
@@ -26,6 +27,7 @@ public class NotificationsMessageBusConfiguration : MessageBusConfiguration
 
     public override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
     {
-        services.AddDbContext<NotificationsDbContext>();
+        services.AddRequestHandlersFrom(Assembly.GetExecutingAssembly())
+            .AddDbContext<NotificationsDbContext>();
     }
 }

@@ -3,18 +3,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Common.App.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Common.Infra.Services.Jwt;
 
-internal class TokenValidatorService : ITokenValidator, ITokenValidationParametersProvider
+internal class TokenValidatorService : ITokenValidator, ITokenValidationParametersProvider, IDisposable
 {
+    private readonly IDisposable? _onChangeTracker;
+
     /// <summary>
     /// Creates new <see cref="TokenValidationParameters"/> using data from <paramref name="options"/>
     /// </summary>
-    /// <inheritdoc cref="JwtConfigurationProperties.ReadConfiguration(IConfiguration)"/>
     public static TokenValidationParameters CreateValidationParameters(JwtValidationOptions options)
     {
         var parameters = new TokenValidationParameters
@@ -28,22 +28,30 @@ internal class TokenValidatorService : ITokenValidator, ITokenValidationParamete
         };
 
         parameters.ValidIssuers = parameters.ValidateIssuer ? options.Issuers.Append(options.ApplicationId) : null;
-        parameters.ValidAudiences = parameters.ValidateAudience ? options.Audiences.Append(options.ApplicationId) : null;
+        parameters.ValidAudiences =
+            parameters.ValidateAudience ? options.Audiences.Append(options.ApplicationId) : null;
 
         return parameters;
     }
 
-    public TokenValidationParameters ValidationParameters { get; }
+    public TokenValidationParameters ValidationParameters { get; private set; }
 
     /// <summary>
     /// Creates new <see cref="TokenValidatorService"/> instance
     /// </summary>
-    public TokenValidatorService(IOptions<JwtValidationOptions> options)
+    public TokenValidatorService(IOptionsMonitor<JwtValidationOptions> options)
     {
-        ValidationParameters = CreateValidationParameters(options.Value);
+        ValidationParameters = CreateValidationParameters(options.CurrentValue);
+        _onChangeTracker = options.OnChange(_recreateValidationParameters);
     }
 
-    public bool ValidateToken(string token, [NotNullWhen(true)] out ClaimsPrincipal? claims, [NotNullWhen(false)] out Exception? problem)
+    private void _recreateValidationParameters(JwtValidationOptions validationOptions)
+    {
+        ValidationParameters = CreateValidationParameters(validationOptions);
+    }
+
+    public bool ValidateToken(string token, [NotNullWhen(true)] out ClaimsPrincipal? claims,
+        [NotNullWhen(false)] out Exception? problem)
     {
         try
         {
@@ -57,5 +65,10 @@ internal class TokenValidatorService : ITokenValidator, ITokenValidationParamete
         }
 
         return claims != null;
+    }
+
+    public void Dispose()
+    {
+        _onChangeTracker?.Dispose();
     }
 }

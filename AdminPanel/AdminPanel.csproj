@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Common.Infra\Common.Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="PresentationServices\UnauthorizedMvcErrorHandler.cs">
+      <DependentUpon>IMvcErrorHandler.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

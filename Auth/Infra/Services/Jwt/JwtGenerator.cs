@@ -10,15 +10,15 @@ namespace Auth.Infra.Services.Jwt;
 public class JwtGenerator : IJwtGenerator
 {
     private readonly JwtSecurityTokenHandler _handler = new();
-    private readonly JwtConfigurationOptions _jwtOptions;
+    private readonly IOptionsMonitor<JwtConfigurationOptions> _jwtOptions;
     private readonly SigningCredentials _signingCredentials;
 
     public JwtGenerator(IOptionsMonitor<JwtConfigurationOptions> optionsMonitor,
         ITokenValidationParametersProvider provider)
     {
-        _jwtOptions = optionsMonitor.CurrentValue;
+        _jwtOptions = optionsMonitor;
         _signingCredentials = new SigningCredentials(provider.ValidationParameters.IssuerSigningKey,
-            _jwtOptions.SigningAlgorithm);
+            _jwtOptions.CurrentValue.SigningAlgorithm);
     }
 
     public JwtSecurityToken BuildToken(IEnumerable<Claim> claims)
@@ -28,9 +28,9 @@ public class JwtGenerator : IJwtGenerator
 
         return _handler.CreateJwtSecurityToken(
             subject: identity,
-            issuer: _jwtOptions.ApplicationId,
-            audience: _jwtOptions.ApplicationId,
-            expires: DateTime.UtcNow.Add(_jwtOptions.LifeTime),
+            issuer: _jwtOptions.CurrentValue.ApplicationId,
+            audience: _jwtOptions.CurrentValue.ApplicationId,
+            expires: DateTime.UtcNow.Add(_jwtOptions.CurrentValue.LifeTime),
             signingCredentials: _signingCredentials);
     }
 
