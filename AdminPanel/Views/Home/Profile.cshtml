@@ -1,5 +1,5 @@
 ﻿@using System.Security.Claims
-@model ProfileViewModel
+@model AdminPanel.ViewModels.ProfileViewModel
 
 <div class="d-flex justify-content-between">
     <h2>Your Profile</h2>
@@ -11,7 +11,7 @@
     </a>
 </div>
 
-@Html.DisplayForModel("PropertyList")
+@Html.DisplayFor(model => model.UserProfile, "PropertyList")
 
 <div class="RolesBlock">
     <strong>You have roles :</strong>

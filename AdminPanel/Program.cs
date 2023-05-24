@@ -30,15 +30,24 @@ builder.Services.AddCommonJwtServices(builder.Configuration)
     .AddCommonJwtBearerAuth();
 
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddCommonHttpClientConfiguration(builder.Configuration,
-        AuthHttpClient.Configuration)
+        AuthHttpClient.Configuration,
+        BackendHttpClient.Configuration)
     .AddScoped<IAuthService, AuthHttpClient>()
     .AddScoped<IProfileRepository, AuthHttpClient>()
-    .AddScoped<IRestaurantRepository, BackendHttpClient>();
+    .AddScoped<IRestaurantRepository, BackendHttpClient>()
+    .AddScoped<IUserRepository, AuthHttpClient>()
+    .AddScoped<IUserService, AuthHttpClient>();
 
 var app = builder.Build();
 
-app.UseExceptionHandler("/Home/Error");
+app.UseExceptionHandler(new ExceptionHandlerOptions()
+{
+    AllowStatusCode404Response = true,
+    ExceptionHandlingPath = "/Home/Error"
+});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseHsts();

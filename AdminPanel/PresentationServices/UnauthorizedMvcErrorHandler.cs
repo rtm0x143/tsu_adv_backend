@@ -36,6 +36,8 @@ public class UnauthorizedMvcErrorHandler : IMvcErrorHandler
         context.HttpContext.Response.Cookies.Delete(_cookieParams.RefreshTokenParameterName);
         context.HttpContext.Response.Cookies.Append(_cookieParams.RefreshTokenParameterName, newRefreshToken);
 
-        context.Complete(new RedirectResult(context.UrlReferrer ?? "/Home"));
+        context.Complete(context.UrlReferrer != null
+            ? new RedirectResult(context.UrlReferrer)
+            : new RedirectToActionResult("Retry", "Home", null));
     }
 }

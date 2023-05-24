@@ -1,20 +1,13 @@
-﻿using Common.App.Dtos;
+﻿using AdminPanel.Views.Shared.DisplayTemplates;
 
-// TODO:
-
-namespace AdminPanel.Models;
-
-public class RestaurantQuery
-{
-    public PaginationInfo<Guid>? Pagination { get; set; }
-}
-
-public record Restaurant(Guid Id, string Name);
+namespace AdminPanel.ViewModels.Abstractions;
 
 public abstract class EntityCatalogViewModel
 {
     public object? Query { get; set; }
     public object[] Entities { get; set; } = Array.Empty<object>();
+
+    public PropertyTableViewData? PropertyTableViewData { get; set; }
 
     public abstract Type QueryType { get; }
     public abstract Type EntityType { get; }
@@ -36,19 +29,4 @@ public class EntityCatalogViewModel<TEntity, TQuery> : EntityCatalogViewModel wh
 
     public override Type QueryType => typeof(TQuery);
     public override Type EntityType => typeof(TEntity);
-}
-
-public class RestaurantCatalogViewModel : EntityCatalogViewModel<Restaurant, RestaurantQuery>
-{
-    public override Restaurant[]? Entities
-    {
-        set
-        {
-            base.Entities = value;
-            if (value == null) return;
-            Query ??= new RestaurantQuery();
-            Query.Pagination =
-                new PaginationInfo<Guid>(value.Length, value.LastOrDefault()?.Id ?? default);
-        }
-    }
 }

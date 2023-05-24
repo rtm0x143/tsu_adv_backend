@@ -12,6 +12,7 @@ using NServiceBus;
 using EndpointConfiguration = NServiceBus.EndpointConfiguration;
 
 namespace Auth.Infra.Messaging;
+
 public class AuthMessageBusConfiguration : MessageBusConfiguration
 {
     protected override EndpointConfiguration CreateEndpointConfiguration(HostBuilderContext context)
@@ -22,10 +23,11 @@ public class AuthMessageBusConfiguration : MessageBusConfiguration
         var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Classic),
             context.Configuration.GetRequiredString("MQ_URI", "ConnectionStrings:MQUri"));
 
+        endpointConfiguration.Conventions()
+            .Add(BackendMessageConvention.Instance);
         endpointConfiguration.UseTransport(transport)
             .RouteToEndpoint(Assembly.GetAssembly(typeof(RestaurantCreatedEvent)), endpointName);
 
-        endpointConfiguration.AddBackendMessages();
         return endpointConfiguration;
     }
 

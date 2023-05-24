@@ -1,7 +1,6 @@
-﻿using AdminPanel.Models;
-using AdminPanel.Services;
+﻿using AdminPanel.Services;
+using AdminPanel.ViewModels;
 using Common.App.Utils;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -14,12 +13,11 @@ public class HomeController : AdminPanelController
         return View();
     }
 
-    // [Authorize]
     public async Task<IActionResult> Profile([FromServices] IProfileRepository profileRepository)
     {
         var selfProfileResult = await profileRepository.GetSelfProfile();
         return selfProfileResult.Succeeded()
-            ? View(selfProfileResult.Value())
+            ? View(new ProfileViewModel { UserProfile = selfProfileResult.Value() })
             : await ErrorView(selfProfileResult.Error());
     }
 
@@ -28,4 +26,6 @@ public class HomeController : AdminPanelController
         var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
         return ErrorView(exceptionHandlerPathFeature?.Error);
     }
+
+    public IActionResult Retry() => View();
 }

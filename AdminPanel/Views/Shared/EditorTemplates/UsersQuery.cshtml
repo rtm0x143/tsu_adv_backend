@@ -1,0 +1,9 @@
+﻿@model AdminPanel.ViewModels.UsersQuery
+
+@Html.EditorFor(model => model.Pagination)
+<div class="mt-"2>
+    @Html.LabelFor(model => model.InRestaurant)
+    @Html.EditorFor(model => model.InRestaurant)
+    @Html.LabelFor(model => model.InRole)
+    @Html.EditorFor(model => model.InRole)
+</div>

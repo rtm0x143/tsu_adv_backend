@@ -1,6 +1,6 @@
 ﻿using AdminPanel.Infra.Http.Configuration;
-using AdminPanel.Models;
 using AdminPanel.Services;
+using AdminPanel.ViewModels;
 using Common.App.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -19,7 +19,6 @@ public class AuthController : AdminPanelController
         [FromServices] IAuthService authService,
         [FromServices] IOptions<CookieParametersOptions> options)
     {
-        // test
         var result = await authService.Login(model.Email, model.Password);
         if (!result.Succeeded())
             return RedirectToAction("Index", routeValues: new { errorMessage = "Authentication failed" });

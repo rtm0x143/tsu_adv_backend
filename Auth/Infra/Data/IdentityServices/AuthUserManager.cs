@@ -1,4 +1,5 @@
-﻿using Auth.Infra.Data.Entities;
+﻿using System.Security.Claims;
+using Auth.Infra.Data.Entities;
 using Common.Infra.Auth;
 using Common.Infra.Dal;
 using Microsoft.AspNetCore.Identity;
@@ -58,13 +59,28 @@ public class AuthUserManager : UserManager<AppUser>
     {
         if (Store is not IUserPasswordStore<AppUser> passwordStore)
             throw new NotSupportedException($"{nameof(Store)} doesn't implement {nameof(IUserPasswordStore<AppUser>)}");
-        
+
         var result = await ValidatePasswordAsync(user, password);
         if (!result.Succeeded) return result;
 
         var passwordHash = PasswordHasher.HashPassword(user, password);
         await passwordStore.SetPasswordHashAsync(user, passwordHash, default);
-        
+
         return IdentityResult.Success;
+    }
+
+    public override Task<IList<Claim>> GetClaimsAsync(AppUser user)
+    {
+        return base.GetClaimsAsync(user).ContinueWith(task =>
+        {
+            if (task.Result.FirstOrDefault(c => c is
+                    { ValueType: CommonClaimTypes.Banned, Value: CommonBanTypes.All }) is Claim claim)
+            {
+                task.Result.Clear();
+                task.Result.Add(claim);
+            }
+
+            return task.Result;
+        });
     }
 }

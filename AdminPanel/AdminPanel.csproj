@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0-pre06" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.5" />
   </ItemGroup>
 
@@ -19,6 +20,28 @@
     <Compile Update="PresentationServices\UnauthorizedMvcErrorHandler.cs">
       <DependentUpon>IMvcErrorHandler.cs</DependentUpon>
     </Compile>
+    <Compile Update="Infra\Http\BackendHttpClient.IRestaurantRepository.cs">
+      <DependentUpon>BackendHttpClient.cs</DependentUpon>
+    </Compile>
+    <Compile Update="PresentationServices\NotFoundMvcErrorHandler.cs">
+      <DependentUpon>IMvcErrorHandler.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Shared\DisplayTemplates\PropertyTableViewData.cs">
+      <DependentUpon>PropertyTable..cshtml</DependentUpon>
+    </Compile>
+    <Compile Update="Infra\Http\AuthHttpClient.IAuthService.cs">
+      <DependentUpon>AuthHttpClient.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Infra\Http\AuthHttpClient.IProfileRepository.cs">
+      <DependentUpon>AuthHttpClient.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
+  <Target Name="Mapster" AfterTargets="AfterBuild">
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet tool restore" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster model -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster extension -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+    <Exec WorkingDirectory="$(ProjectDir)" Command="dotnet mapster mapper -a &quot;$(TargetDir)$(ProjectName).dll&quot;  -n &quot;$(ProjectName).Converters&quot; -o &quot;./Converters/Generated&quot;" />
+  </Target>
+  
 </Project>

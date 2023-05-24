@@ -18,10 +18,11 @@ public class NotificationsMessageBusConfiguration : MessageBusConfiguration
         var transport = new RabbitMQTransport(RoutingTopology.Conventional(QueueType.Classic),
             context.Configuration.GetRequiredString("MQ_URI", "ConnectionStrings:MQUri"));
 
+        endpointConfiguration.Conventions()
+            .Add(BackendMessageConvention.Instance);
         endpointConfiguration.UseTransport(transport)
             .RouteToEndpoint(Assembly.GetAssembly(typeof(RestaurantCreatedEvent)), endpointName);
 
-        endpointConfiguration.AddBackendMessages();
         return endpointConfiguration;
     }
 

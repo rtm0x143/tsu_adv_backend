@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using AdminPanel.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.PresentationServices;
@@ -7,6 +8,7 @@ public class MvcErrorHandleContext
 {
     public IActionResult? Result { get; private set; }
     public bool IsCompleted => Result != null;
+    public ErrorViewModel ViewModel { get; } = new();
 
     public bool TryGetResult([NotNullWhen(true)] out IActionResult? result)
     {

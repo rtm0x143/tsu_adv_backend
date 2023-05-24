@@ -126,9 +126,6 @@
     <Compile Update="Features\Customer\Commands\ChangeProfile.Presentation.cs">
       <DependentUpon>IChangeProfile.cs</DependentUpon>
     </Compile>
-    <Compile Update="Features\Auth\Common\RefreshToken.Mapper.cs">
-      <DependentUpon>RefreshToken.cs</DependentUpon>
-    </Compile>
     <Compile Update="Features\User\Commands\ChangeProfile.Presentation.cs">
       <DependentUpon>IChangeProfile.cs</DependentUpon>
     </Compile>
@@ -137,6 +134,15 @@
     </Compile>
     <Compile Update="Features\User\Commands\DeleteUser.cs">
       <DependentUpon>IDeleteUser.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Queries\GetUsers.cs">
+      <DependentUpon>IGetUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Commands\ChangeUserBanned.cs">
+      <DependentUpon>IChangeUserBanned.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\User\Queries\GetUser.cs">
+      <DependentUpon>IGetUser.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

@@ -1,5 +1,4 @@
-﻿using Common.App.Exceptions;
-using Common.Domain.Exceptions;
+﻿using Common.Domain.Exceptions;
 using OneOf;
 
 namespace Auth.Features.Auth.Common;

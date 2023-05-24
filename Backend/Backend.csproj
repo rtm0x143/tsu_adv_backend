@@ -169,6 +169,9 @@
     </Compile>
     <Compile Remove="Backend.Events\**" />
     <Compile Remove="Backend.Messaging\**" />
+    <Compile Update="Features\Restaurant\Queries\GetById.cs">
+      <DependentUpon>IGetById.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

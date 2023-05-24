@@ -19,14 +19,11 @@ namespace Auth.Controllers
         /// <responce code="403">Recovery token was invalid</responce>
         /// <responce code="400">New password token was invalid</responce>
         /// <remarks>If succeeded, all refresh tokens will be invalidated</remarks>
-        [HttpPut("password/recover")] 
+        [HttpPut("password/recover")]
         public Task<ActionResult> RecoverPassword(RecoverPasswordCommand command,
             [FromServices] IRecoverPassword recoverPassword)
         {
-            return recoverPassword.Execute(command)
-                .ContinueWith(t => t.Result.IsT0
-                    ? Ok()
-                    : ExceptionsDescriber.Describe(t.Result.Value));
+            return ExecuteRequest(recoverPassword, command);
         }
     }
 }
@@ -60,7 +57,7 @@ namespace Auth.Features.Auth.Commands
                     ? new InvalidCredentialException(nameof(command.ChangePasswordToken))
                     : UnsuitableDataException.FromIdentityResult(resetResult);
             }
-            
+
             await _refreshTokenHandler.DropFamily(user);
             return new EmptyResult();
         }

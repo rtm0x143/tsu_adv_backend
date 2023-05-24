@@ -1,0 +1,9 @@
+﻿@model AdminPanel.ViewModels.Abstractions.EntityCatalogViewModel
+
+@using (Html.BeginForm(FormMethod.Get))
+{
+    @Html.EditorFor(model => model.Query, Model.QueryType.Name)
+}
+<hr/>
+
+@Html.DisplayFor(model => model.Entities, "PropertyTable", Model.PropertyTableViewData)

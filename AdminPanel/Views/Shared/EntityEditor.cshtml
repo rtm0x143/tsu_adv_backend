@@ -1,0 +1,12 @@
+﻿@using AdminPanel.ViewModels;
+@model EntityEditorViewModel
+
+@{
+    if (Model.Entity == null) throw new KeyNotFoundException();
+    ViewBag.Title = Model.Entity.GetType().Name;
+    Layout = "_Layout";
+}
+
+@{
+    await Html.RenderPartialAsync("_EntityEditor");
+}

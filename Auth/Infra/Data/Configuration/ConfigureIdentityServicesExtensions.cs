@@ -1,7 +1,9 @@
-﻿using Auth.Infra.Data.Entities;
+﻿using System.Security.Claims;
+using Auth.Infra.Data.Entities;
 using Auth.Infra.Data.IdentityServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Auth.Infra.Data.Configuration;
 

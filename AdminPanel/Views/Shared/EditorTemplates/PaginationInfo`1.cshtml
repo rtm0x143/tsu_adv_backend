@@ -14,7 +14,7 @@
                     .Select(e => e.ErrorMessage) ?? Array.Empty<string>())
             </div>
         </label>
-        <input hidden="hidden" value="@Model?.AfterRecord" asp-for="AfterRecord"/>
+        <input id="Pagination.AfterRecord" hidden="hidden" value="@Model?.AfterRecord" asp-for="AfterRecord"/>
     </div>
     <div class="ms-2">
         <div >
@@ -24,7 +24,7 @@
             }
         </div>
         <div >
-            <button class="w-100" type="submit">First page</button>
+            <button class="w-100" type="submit" onclick="document.getElementById('Pagination.AfterRecord').value = null" >First page</button>
         </div>
     </div>
 </div>

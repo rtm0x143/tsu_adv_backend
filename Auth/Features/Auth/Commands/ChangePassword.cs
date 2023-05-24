@@ -3,6 +3,7 @@ using Auth.Features.Auth.Common;
 using Auth.Infra.Data;
 using Auth.Infra.Data.Entities;
 using Common.App.Exceptions;
+using Common.App.Utils;
 using Common.Domain.Exceptions;
 using Common.Infra.Dal;
 using Microsoft.AspNetCore.Authorization;
@@ -62,15 +63,15 @@ namespace Auth.Features.Auth.Commands
             await _refreshTokenHandler.DropFamily(user);
 
             var refreshIssueResult = await _refreshTokenHandler.IssuerFor(user);
-            if (!refreshIssueResult.IsT0)
+            if (!refreshIssueResult.Succeeded())
             {
                 await tr.RollbackAsync();
-                return (Exception)refreshIssueResult.Value;
+                return refreshIssueResult.Error();
             }
 
             var claims = await _signInManager.ClaimsFactory.CreateAsync(user);
             var tokens = new TokensResult(_jwtGenerator.IssueToken(claims.Claims),
-                _refreshTokenHandler.Write(refreshIssueResult.AsT0));
+                _refreshTokenHandler.Write(refreshIssueResult.Value()));
 
             await tr.CommitAsync();
             return tokens;

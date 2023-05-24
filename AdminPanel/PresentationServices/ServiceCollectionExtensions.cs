@@ -4,6 +4,8 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPresentationServices(this IServiceCollection services)
     {
-        return services.AddScoped<IMvcErrorHandler, UnauthorizedMvcErrorHandler>();
+        return services.AddScoped<IMvcErrorHandler, UnauthorizedMvcErrorHandler>()
+            .AddSingleton<IMvcErrorHandler, HttpRequestMvcErrorHandler>()
+            .AddSingleton<IMvcErrorHandler, NotFoundMvcErrorHandler>();
     }
 }

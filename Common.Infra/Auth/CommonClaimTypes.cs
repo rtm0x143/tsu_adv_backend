@@ -22,4 +22,9 @@ public static class CommonClaimTypes
     /// Values are <see cref="CommonManageTargets"/>, indicates what targets can manage user
     /// </summary>
     public const string Manage = "Manage";
+
+    /// <summary>
+    /// Value is <see cref="CommonBanTypes"/> 
+    /// </summary>
+    public const string Banned = "Banned";
 }

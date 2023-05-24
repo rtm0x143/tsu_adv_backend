@@ -8,8 +8,10 @@ using Common.Infra.Messaging;
 using Common.Infra.Services.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Notifications.Hubs;
 using Notifications.Infra;
+using Notifications.Infra.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,31 +28,15 @@ builder.Services.AddCommonSwagger();
 builder.Services.AddDbContext<NotificationsDbContext>(options => options.UseNpgsql(
     builder.Configuration.GetRequiredString("NOTIFICATIONS_DB_CONN", "ConnectionStrings:Default")));
 
-builder.Services.AddCommonJwtServices(builder.Configuration)
-    .AddCommonJwtBearerAuth(options =>
-    {
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                var accessToken = context.Request.Query["access_token"];
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/api/hubs"))
-                {
-                    context.Token = accessToken;
-                    return Task.CompletedTask;
-                }
+builder.Services.AddSingleton<IPostConfigureOptions<JwtBearerOptions>, AccessTokenFromQueryConfiguration>()
+    .AddCommonJwtServices(builder.Configuration)
+    .AddCommonJwtBearerAuth();
 
-                return Task.CompletedTask;
-            }
-        };
-    });
-
-// TODO : refactor
-// builder.Services.Configure<JwtBearerOptions>();
 builder.Services.AddCommonAuthorization();
 builder.Services.AddRequestHandlersFrom(Assembly.GetExecutingAssembly());
 builder.Host.ConfigureMessageBus<NotificationsMessageBusConfiguration>();
+
+
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {

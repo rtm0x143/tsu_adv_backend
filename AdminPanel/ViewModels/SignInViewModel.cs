@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
-namespace AdminPanel.Models;
+namespace AdminPanel.ViewModels;
 
 public class SignInViewModel
 {

@@ -1,10 +1,10 @@
 using System.Net;
 
-namespace AdminPanel.Models
+namespace AdminPanel.ViewModels
 {
     public class ErrorViewModel
     {
-        public HttpStatusCode StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.InternalServerError;
         public string? Message { get; set; }
         public Uri? UrlReferrer { get; set; }
     }

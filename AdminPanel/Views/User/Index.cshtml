@@ -1,0 +1,9 @@
+﻿@model AdminPanel.ViewModels.UserCatalogViewModel
+
+@{
+    ViewBag.Title = "User Catalog";
+    Layout = "_Layout";
+    Model.PropertyTableViewData ??= new(nameof(AdminPanel.Entities.User.Id), "User", "Details");
+}
+
+@await Html.PartialAsync("_EntityCatalogPartial", Model)

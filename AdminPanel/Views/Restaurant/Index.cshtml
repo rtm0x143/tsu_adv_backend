@@ -1,15 +1,10 @@
-﻿@using AdminPanel.Views.Shared.DisplayTemplates
-@model EntityCatalogViewModel
+﻿@using AdminPanel.Entities
+@model AdminPanel.ViewModels.RestaurantCatalogViewModel
 
 @{
-    ViewBag.Title = Model.EntityType.Name + " Catalog";
+    ViewBag.Title = "Restaurants Catalog";
     Layout = "_Layout";
+    Model.PropertyTableViewData ??= new(nameof(Restaurant.Id), "Restaurant", "Details");
+}
 
-}
-@using (Html.BeginForm(FormMethod.Get))
-{
-    @Html.EditorFor(model => model.Query, Model.QueryType.Name)
-}
-<hr/>
-@Html.DisplayFor(model => model.Entities, "PropertyTable",
-    new PropertyTableViewData(nameof(Restaurant.Id), "Restaurant", "Details"))
+@await Html.PartialAsync("_EntityCatalogPartial", Model)

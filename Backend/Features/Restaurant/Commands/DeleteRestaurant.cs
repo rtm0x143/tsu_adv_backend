@@ -22,10 +22,10 @@ namespace Backend.Controllers
         /// <response code="403">When user has no permissions to create restaurant</response>
         [Authorize(Roles = nameof(CommonRoles.Admin))]
         [HttpDelete("{id}")]
-        public Task<ActionResult<IdResult>> Delete(Guid id, [FromServices] IDeleteRestaurant deleteRestaurant)
+        public Task<ActionResult> Delete(Guid id, [FromServices] IDeleteRestaurant deleteRestaurant)
         {
             return deleteRestaurant.Execute(new(id))
-                .ContinueWith<ActionResult<IdResult>>(t => t.Result.Succeeded()
+                .ContinueWith<ActionResult>(t => t.Result.Succeeded()
                     ? Ok()
                     : ExceptionsDescriber.Describe(t.Result.Error()));
         }

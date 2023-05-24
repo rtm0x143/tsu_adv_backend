@@ -1,6 +1,4 @@
-﻿using System.Net;
-using AdminPanel.Models;
-using AdminPanel.PresentationServices;
+﻿using AdminPanel.PresentationServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPanel.Controllers;
@@ -11,8 +9,8 @@ public class AdminPanelController : Controller
 
     public virtual async Task<IActionResult> ErrorView(Exception? exception)
     {
-        var context = new MvcErrorHandleContext(exception, HttpContext);
-        foreach (var mvcErrorHandler in ErrorHandlers)
+        var context = new MvcErrorHandleContext(exception, HttpContext, null);
+        foreach (var mvcErrorHandler in ErrorHandlers.Order())
         {
             await mvcErrorHandler.Handle(context);
             if (context.IsCompleted) break;
@@ -20,15 +18,12 @@ public class AdminPanelController : Controller
 
         if (context.TryGetResult(out var actionResult)) return actionResult;
 
-        var model = new ErrorViewModel
-        {
-            StatusCode = HttpStatusCode.InternalServerError,
-            Message = exception?.Message
-        };
+        context.ViewModel.Message ??= exception?.Message;
 
-        if (TempData["UrlReferrer"] is string path
-            && Uri.TryCreate(path, UriKind.RelativeOrAbsolute, out var uri)) model.UrlReferrer = uri;
+        if (context.ViewModel.UrlReferrer == null
+            && TempData["UrlReferrer"] is string path
+            && Uri.TryCreate(path, UriKind.RelativeOrAbsolute, out var uri)) context.ViewModel.UrlReferrer = uri;
 
-        return View("Error", model);
+        return View("Error", context.ViewModel);
     }
 }

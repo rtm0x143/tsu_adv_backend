@@ -1,0 +1,20 @@
+﻿@using AdminPanel.ViewModels;
+@using Microsoft.AspNetCore.Http
+@model EntityEditorViewModel
+
+<div class="d-flex justify-content-between">
+    <h2 class="me-3">@Model.Entity.GetType().Name Editor</h2>
+    @if (Model.OnDeleteAction != null)
+    {
+        <form action="@Model.OnDeleteAction" method="@HttpMethods.Post">
+            <button type="submit">Delete</button>
+        </form>
+    }
+</div>
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    @Html.EditorFor(model => model.Entity)
+    <br/>
+    <button type="submit">Save</button>
+}

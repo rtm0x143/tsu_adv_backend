@@ -1,6 +1,10 @@
-﻿namespace AdminPanel.PresentationServices;
+﻿using Common.Domain.Utils;
 
-public interface IMvcErrorHandler
+namespace AdminPanel.PresentationServices;
+
+public interface IMvcErrorHandler : IHasOrderFactor
 {
     public ValueTask Handle(MvcErrorHandleContext handleContext);
+
+    int IHasOrderFactor.OrderFactor => 0;
 }
