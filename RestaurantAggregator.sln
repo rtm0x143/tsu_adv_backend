@@ -17,6 +17,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.App", "Common.App\Common.App.csproj", "{A207B475-0781-4D3E-8D22-4E1EE2DD70D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Auth", "Auth", "{E9839FD2-C526-4CD4-9BBB-E3A4A0C1B3A5}"
+	ProjectSection(SolutionItems) = preProject
+		Auth\readme.md = Auth\readme.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{AEFAA57A-0A0C-4232-9143-349CB025B568}"
 EndProject
