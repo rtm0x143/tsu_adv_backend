@@ -1,4 +1,4 @@
-﻿## Notifications - REST API + WS
+## Notifications - REST API + WS
 
 ### Features
 TODO
