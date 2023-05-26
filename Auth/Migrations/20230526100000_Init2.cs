@@ -4,12 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Auth.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Init2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,6 +33,8 @@ namespace Auth.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Gender = table.Column<int>(type: "integer", nullable: false),
                     BirthDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Discriminator = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -152,17 +152,19 @@ namespace Auth.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomersData",
+                name: "UserRefreshTokens",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: true)
+                    ExpiresAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsUsed = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomersData", x => x.UserId);
+                    table.PrimaryKey("PK_UserRefreshTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CustomersData_AspNetUsers_UserId",
+                        name: "FK_UserRefreshTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -196,34 +198,6 @@ namespace Auth.Migrations
                         principalTable: "Restaurants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { new Guid("0294cc6b-bee5-4fd8-92a9-5c3f7da6de0b"), null, "Customer", "CUSTOMER" },
-                    { new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82"), null, "RestaurantAdmin", "RESTAURANTADMIN" },
-                    { new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4"), null, "Admin", "ADMIN" },
-                    { new Guid("59eebf24-ad0f-4bcb-b514-4c72376253ec"), null, "Cook", "COOK" },
-                    { new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19"), null, "RestaurantOwner", "RESTAURANTOWNER" },
-                    { new Guid("7e63d4dc-c365-45f8-9bd5-3e83d9f571bc"), null, "Manager", "MANAGER" },
-                    { new Guid("89efd21c-aa39-449a-97b2-474646701433"), null, "Courier", "COURIER" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoleClaims",
-                columns: new[] { "Id", "ClaimType", "ClaimValue", "RoleId" },
-                values: new object[,]
-                {
-                    { 1, "Grant", "Cook", new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19") },
-                    { 2, "Grant", "Manager", new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19") },
-                    { 3, "Grant", "Courier", new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19") },
-                    { 4, "Grant", "RestaurantAdmin", new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19") },
-                    { 5, "Grant", "Cook", new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82") },
-                    { 6, "Grant", "Manager", new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82") },
-                    { 7, "Grant", "Courier", new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -267,6 +241,11 @@ namespace Auth.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRefreshTokens_UserId",
+                table: "UserRefreshTokens",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -288,7 +267,7 @@ namespace Auth.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CustomersData");
+                name: "UserRefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "Restaurants");

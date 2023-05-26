@@ -17,7 +17,7 @@ namespace Backend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0-preview.3.23174.2")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -66,7 +66,74 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RestaurantId");
+
                     b.ToTable("Dishes", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Features.Dish.Domain.DishInOrder", b =>
+                {
+                    b.Property<Guid>("DishId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DishId");
+
+                    b.Property<decimal>("OrderNumber")
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("OrderNumber");
+
+                    b.HasKey("DishId", "OrderNumber");
+
+                    b.HasIndex("OrderNumber");
+
+                    b.ToTable("DishInOrder", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Features.Dish.Domain.DishRate", b =>
+                {
+                    b.Property<Guid>("DishId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<float>("Score")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("real")
+                        .HasColumnName("Value");
+
+                    b.HasKey("DishId", "UserId");
+
+                    b.ToTable("DishRates", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Features.Dish.Domain.Order", b =>
+                {
+                    b.Property<decimal>("Number")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("Status");
+
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("uuid")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Number");
+
+                    b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Features.Dish.Domain.Restaurant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Restaurants", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Features.Order.Domain.Dish", b =>
@@ -99,9 +166,9 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("UserId");
 
-                    b.Property<long>("Count")
+                    b.Property<decimal>("Count")
                         .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("bigint")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("Count");
 
                     b.HasKey("DishId", "UserId");
@@ -119,9 +186,9 @@ namespace Backend.Migrations
                         .HasColumnType("numeric(20,0)")
                         .HasColumnName("OrderNumber");
 
-                    b.Property<long>("Count")
+                    b.Property<decimal>("Count")
                         .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("bigint")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("Count");
 
                     b.HasKey("DishId", "OrderNumber");
@@ -199,6 +266,9 @@ namespace Backend.Migrations
                         .HasColumnType("numeric(20,0)")
                         .HasColumnName("OrderNumber");
 
+                    b.Property<decimal?>("OrderStatusStateOrderNumber")
+                        .HasColumnType("numeric(20,0)");
+
                     b.Property<int>("Status")
                         .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("integer")
@@ -213,7 +283,24 @@ namespace Backend.Migrations
 
                     b.HasIndex("OrderNumber");
 
+                    b.HasIndex("OrderStatusStateOrderNumber");
+
                     b.ToTable("OrderStatusLog", (string)null);
+                });
+
+            modelBuilder.Entity("Backend.Features.Order.Domain.OrderStatusState", b =>
+                {
+                    b.Property<decimal>("OrderNumber")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.Property<int>("OrderStatus")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("Status");
+
+                    b.HasKey("OrderNumber");
+
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Infra.Data.Entities.Dish", b =>
@@ -274,9 +361,9 @@ namespace Backend.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("UserId");
 
-                    b.Property<long>("Count")
+                    b.Property<decimal>("Count")
                         .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("bigint")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("Count");
 
                     b.HasKey("DishId", "UserId");
@@ -294,9 +381,9 @@ namespace Backend.Migrations
                         .HasColumnType("numeric(20,0)")
                         .HasColumnName("OrderNumber");
 
-                    b.Property<long>("Count")
+                    b.Property<decimal>("Count")
                         .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("bigint")
+                        .HasColumnType("numeric(20,0)")
                         .HasColumnName("Count");
 
                     b.HasKey("DishId", "OrderNumber");
@@ -315,6 +402,7 @@ namespace Backend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<float>("Value")
+                        .ValueGeneratedOnUpdateSometimes()
                         .HasColumnType("real")
                         .HasColumnName("Value");
 
@@ -335,7 +423,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Menus", (string)null);
+                    b.ToTable("Menus");
                 });
 
             modelBuilder.Entity("Backend.Infra.Data.Entities.Order", b =>
@@ -438,7 +526,7 @@ namespace Backend.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Restaurants", (string)null);
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("DishMenu", b =>
@@ -456,12 +544,18 @@ namespace Backend.Migrations
 
                     b.HasIndex("IntoMenusName", "IntoMenusRestaurantId");
 
-                    b.ToTable("DishMenu", (string)null);
+                    b.ToTable("DishMenu");
                 });
 
             modelBuilder.Entity("Backend.Features.Dish.Domain.Dish", b =>
                 {
-                    b.OwnsOne("Backend.Features.Dish.Domain.Dish.CachedRate#Backend.Features.Dish.Domain.Dish+Rate", "CachedRate", b1 =>
+                    b.HasOne("Backend.Features.Dish.Domain.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Backend.Features.Dish.Domain.ValueTypes.Rate", "CachedRate", b1 =>
                         {
                             b1.Property<Guid>("DishId")
                                 .HasColumnType("uuid");
@@ -478,13 +572,50 @@ namespace Backend.Migrations
 
                             b1.HasKey("DishId");
 
-                            b1.ToTable("Dishes", (string)null);
+                            b1.ToTable("Dishes");
 
                             b1.WithOwner()
                                 .HasForeignKey("DishId");
                         });
 
                     b.Navigation("CachedRate")
+                        .IsRequired();
+
+                    b.Navigation("Restaurant");
+                });
+
+            modelBuilder.Entity("Backend.Features.Dish.Domain.DishInOrder", b =>
+                {
+                    b.HasOne("Backend.Features.Dish.Domain.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Features.Order.Domain.DishInOrder", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.Features.Dish.Domain.DishInOrder", "DishId", "OrderNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Backend.Features.Dish.Domain.Order", b =>
+                {
+                    b.HasOne("Backend.Features.Order.Domain.Order", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.Features.Dish.Domain.Order", "Number")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backend.Features.Dish.Domain.Restaurant", b =>
+                {
+                    b.HasOne("Backend.Infra.Data.Entities.Restaurant", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.Features.Dish.Domain.Restaurant", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -538,6 +669,19 @@ namespace Backend.Migrations
                         .HasForeignKey("OrderNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Backend.Features.Order.Domain.OrderStatusState", null)
+                        .WithMany("OrderStatusLogs")
+                        .HasForeignKey("OrderStatusStateOrderNumber");
+                });
+
+            modelBuilder.Entity("Backend.Features.Order.Domain.OrderStatusState", b =>
+                {
+                    b.HasOne("Backend.Infra.Data.Entities.Order", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.Features.Order.Domain.OrderStatusState", "OrderNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backend.Infra.Data.Entities.Dish", b =>
@@ -554,7 +698,7 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Backend.Infra.Data.Entities.Dish.CachedRate#Backend.Infra.Data.Entities.Dish+Rate", "CachedRate", b1 =>
+                    b.OwnsOne("Backend.Infra.Data.Entities.Dish+Rate", "CachedRate", b1 =>
                         {
                             b1.Property<Guid>("DishId")
                                 .HasColumnType("uuid");
@@ -571,7 +715,7 @@ namespace Backend.Migrations
 
                             b1.HasKey("DishId");
 
-                            b1.ToTable("Dishes", (string)null);
+                            b1.ToTable("Dishes");
 
                             b1.WithOwner()
                                 .HasForeignKey("DishId");
@@ -624,6 +768,12 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Infra.Data.Entities.Dish", null)
                         .WithMany()
                         .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Features.Dish.Domain.DishRate", null)
+                        .WithOne()
+                        .HasForeignKey("Backend.Infra.Data.Entities.DishRate", "DishId", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -691,6 +841,11 @@ namespace Backend.Migrations
                     b.Navigation("Dishes");
 
                     b.Navigation("StatusLogs");
+                });
+
+            modelBuilder.Entity("Backend.Features.Order.Domain.OrderStatusState", b =>
+                {
+                    b.Navigation("OrderStatusLogs");
                 });
 
             modelBuilder.Entity("Backend.Infra.Data.Entities.Order", b =>

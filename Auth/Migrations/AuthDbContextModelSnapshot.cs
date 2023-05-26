@@ -124,7 +124,7 @@ namespace Auth.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Restaurants", (string)null);
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("Auth.Infra.Data.Entities.RoleEntity", b =>
@@ -152,50 +152,6 @@ namespace Auth.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("0294cc6b-bee5-4fd8-92a9-5c3f7da6de0b"),
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = new Guid("7e63d4dc-c365-45f8-9bd5-3e83d9f571bc"),
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4"),
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("59eebf24-ad0f-4bcb-b514-4c72376253ec"),
-                            Name = "Cook",
-                            NormalizedName = "COOK"
-                        },
-                        new
-                        {
-                            Id = new Guid("89efd21c-aa39-449a-97b2-474646701433"),
-                            Name = "Courier",
-                            NormalizedName = "COURIER"
-                        },
-                        new
-                        {
-                            Id = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19"),
-                            Name = "RestaurantOwner",
-                            NormalizedName = "RESTAURANTOWNER"
-                        },
-                        new
-                        {
-                            Id = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82"),
-                            Name = "RestaurantAdmin",
-                            NormalizedName = "RESTAURANTADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Auth.Infra.Data.Entities.UserRefreshToken", b =>
@@ -217,7 +173,7 @@ namespace Auth.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRefreshTokens", (string)null);
+                    b.ToTable("UserRefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -242,155 +198,6 @@ namespace Auth.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClaimType = "Grant",
-                            ClaimValue = "Cook",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClaimType = "Grant",
-                            ClaimValue = "Manager",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ClaimType = "Grant",
-                            ClaimValue = "RestaurantAdmin",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ClaimType = "Grant",
-                            ClaimValue = "Cook",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ClaimType = "Grant",
-                            ClaimValue = "Manager",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ClaimType = "Grant",
-                            ClaimValue = "RestaurantAdmin",
-                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ClaimType = "Grant",
-                            ClaimValue = "Cook",
-                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ClaimType = "Grant",
-                            ClaimValue = "Manager",
-                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ClaimType = "Grant",
-                            ClaimValue = "Courier",
-                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ClaimType = "Grant",
-                            ClaimValue = "RestaurantOwner",
-                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ClaimType = "PersonalData",
-                            ClaimValue = "Read",
-                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
-                        },
-                        new
-                        {
-                            Id = 14,
-                            ClaimType = "PersonalData",
-                            ClaimValue = "Change",
-                            RoleId = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4")
-                        },
-                        new
-                        {
-                            Id = 16,
-                            ClaimType = "Manage",
-                            ClaimValue = "Menu",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 17,
-                            ClaimType = "Manage",
-                            ClaimValue = "Kitchen",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 18,
-                            ClaimType = "Manage",
-                            ClaimValue = "Delivery",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 19,
-                            ClaimType = "Manage",
-                            ClaimValue = "Menu",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        },
-                        new
-                        {
-                            Id = 20,
-                            ClaimType = "Manage",
-                            ClaimValue = "Kitchen",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        },
-                        new
-                        {
-                            Id = 21,
-                            ClaimType = "Manage",
-                            ClaimValue = "Delivery",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        },
-                        new
-                        {
-                            Id = 22,
-                            ClaimType = "Manage",
-                            ClaimValue = "Delivery",
-                            RoleId = new Guid("89efd21c-aa39-449a-97b2-474646701433")
-                        },
-                        new
-                        {
-                            Id = 23,
-                            ClaimType = "Manage",
-                            ClaimValue = "Kitchen",
-                            RoleId = new Guid("59eebf24-ad0f-4bcb-b514-4c72376253ec")
-                        },
-                        new
-                        {
-                            Id = 24,
-                            ClaimType = "Manage",
-                            ClaimValue = "Menu",
-                            RoleId = new Guid("7e63d4dc-c365-45f8-9bd5-3e83d9f571bc")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>

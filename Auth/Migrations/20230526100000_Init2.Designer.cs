@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Auth.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20230413150521_UserHierarchy")]
-    partial class UserHierarchy
+    [Migration("20230526100000_Init2")]
+    partial class Init2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -155,50 +155,6 @@ namespace Auth.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("0294cc6b-bee5-4fd8-92a9-5c3f7da6de0b"),
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = new Guid("7e63d4dc-c365-45f8-9bd5-3e83d9f571bc"),
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = new Guid("3a582199-77b1-4352-a61a-fce564ebb8d4"),
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("59eebf24-ad0f-4bcb-b514-4c72376253ec"),
-                            Name = "Cook",
-                            NormalizedName = "COOK"
-                        },
-                        new
-                        {
-                            Id = new Guid("89efd21c-aa39-449a-97b2-474646701433"),
-                            Name = "Courier",
-                            NormalizedName = "COURIER"
-                        },
-                        new
-                        {
-                            Id = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19"),
-                            Name = "RestaurantOwner",
-                            NormalizedName = "RESTAURANTOWNER"
-                        },
-                        new
-                        {
-                            Id = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82"),
-                            Name = "RestaurantAdmin",
-                            NormalizedName = "RESTAURANTADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Auth.Infra.Data.Entities.UserRefreshToken", b =>
@@ -245,57 +201,6 @@ namespace Auth.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClaimType = "Grant",
-                            ClaimValue = "Cook",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClaimType = "Grant",
-                            ClaimValue = "Manager",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClaimType = "Grant",
-                            ClaimValue = "Courier",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ClaimType = "Grant",
-                            ClaimValue = "RestaurantAdmin",
-                            RoleId = new Guid("761a9b67-f1e1-49b0-9a84-38e40be52d19")
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ClaimType = "Grant",
-                            ClaimValue = "Cook",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ClaimType = "Grant",
-                            ClaimValue = "Manager",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ClaimType = "Grant",
-                            ClaimValue = "Courier",
-                            RoleId = new Guid("33d4a50c-3a9d-4c24-a4a7-4f2dbb64ad82")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
